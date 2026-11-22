@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Project Pan</title>
+<meta name="theme-color" content="#FFF1EE">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Project Pan">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ============ THEME ============ */
+:root{--bg:#FFF1EE;--card:#fff;--card2:#F3F1FC;--chip:#E4DEF7;--ink:#1E2B4D;--ink2:#6B5B95;--muted:#8B87A8;--pink:#F08CA3;--pink2:#FFB3BF;--pinksoft:#FFDCE2;--line:rgba(30,43,77,.09);--shadow:0 8px 26px rgba(107,91,149,.14);--shadow2:0 3px 10px rgba(107,91,149,.12);--glass:rgba(255,255,255,.74);--btn:#1E2B4D;--onbtn:#fff;--ok:#2FB784;--warn:#F2A33A;--bad:#E5484D;--okbg:#DDF5EA;--warnbg:#FFEBCF;--badbg:#FFDADB;color-scheme:light}
+:root.dark{--bg:#2A1F3D;--card:#382B52;--card2:#44355F;--chip:#57467F;--ink:#F6F1FF;--ink2:#CDBBF5;--muted:#A798CC;--pinksoft:#5B3A5F;--line:rgba(255,255,255,.1);--shadow:0 8px 26px rgba(0,0,0,.35);--shadow2:0 3px 10px rgba(0,0,0,.3);--glass:rgba(56,43,82,.78);--btn:#E4DEF7;--onbtn:#2A1F3D;--okbg:#1F4D44;--warnbg:#5B4527;--badbg:#6A2F3A;color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{background:var(--bg)}
+body{margin:0;font-family:"DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-weight:500;color:var(--ink);background:var(--bg);font-size:15px;line-height:1.4;overscroll-behavior-y:none}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none;padding:0}
+img{display:block;max-width:100%}
+:focus-visible{outline:3px solid var(--pink);outline-offset:2px;border-radius:12px}
+.wrap{max-width:720px;margin:0 auto;padding:calc(18px + env(safe-area-inset-top)) 18px calc(130px + env(safe-area-inset-bottom))}
+h1{font-size:28px;line-height:1.1;font-weight:800;margin:0;letter-spacing:-.5px}
+h2{font-size:20px;font-weight:800;margin:0}
+h3{font-size:16px;font-weight:700;margin:0}
+.lbl{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink2)}
+.muted{color:var(--muted)}.sm{font-size:13px}.xs{font-size:12px}
+.row{display:flex;align-items:center;gap:10px}.between{justify-content:space-between}.grow{flex:1;min-width:0}.wrapf{flex-wrap:wrap}
+.clamp{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.one{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mt8{margin-top:8px}.mt12{margin-top:12px}.mt16{margin-top:16px}.mt24{margin-top:24px}
+.ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.ic.f{fill:currentColor}
+/* buttons */
+.rbtn{width:44px;height:44px;border-radius:50%;background:var(--card);box-shadow:var(--shadow2);display:grid;place-items:center;color:var(--ink);transition:transform .15s}
+.rbtn:active{transform:scale(.92)}.rbtn.on{background:var(--pink);color:#fff}
+.btn{min-height:48px;padding:0 22px;border-radius:999px;background:var(--btn);color:var(--onbtn);font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .15s,opacity .2s;text-align:center}
+.btn:active{transform:scale(.97)}.btn.pink{background:var(--pink);color:#fff}.btn.soft{background:var(--chip);color:var(--ink)}.btn.ghost{background:transparent;border:2px solid var(--line);color:var(--ink)}.btn.danger{background:var(--badbg);color:var(--bad)}.btn.sm{min-height:44px;padding:0 16px;font-size:14px}.btn.block{width:100%}.btn[disabled]{opacity:.5;pointer-events:none}
+.card{background:var(--card);border-radius:24px;box-shadow:var(--shadow);padding:16px}
+.card.lav{background:var(--card2);box-shadow:none}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:999px;background:var(--card2);color:var(--ink2);font-size:12px;font-weight:700}
+.pill.pk{background:var(--pinksoft);color:#C2415F}.dark .pill.pk{color:#FFB3BF}.pill.ok{background:var(--okbg);color:var(--ok)}.pill.warn{background:var(--warnbg);color:#B26A00}.dark .pill.warn{color:#FFC76B}.pill.bad{background:var(--badbg);color:var(--bad)}
+.chips{display:flex;gap:10px;overflow-x:auto;padding:6px 18px 10px;margin:0 -18px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:64px;padding:2px;font-size:12px;font-weight:700;color:var(--ink2)}
+.chip .cc{width:52px;height:52px;border-radius:50%;background:var(--card);display:grid;place-items:center;font-size:24px;box-shadow:var(--shadow2);border:3px solid transparent;transition:.2s}
+.chip.on{color:var(--ink)}.chip.on .cc{border-color:var(--pink);background:var(--pinksoft)}
+.tchip{min-height:44px;padding:0 16px;border-radius:999px;background:var(--card);box-shadow:var(--shadow2);font-weight:700;font-size:14px;color:var(--ink2);white-space:nowrap;flex:none}
+.tchip.on{background:var(--btn);color:var(--onbtn)}
+.seg{display:flex;background:var(--card2);border-radius:999px;padding:4px;gap:2px}.seg button{flex:1;min-height:44px;border-radius:999px;font-weight:700;font-size:14px;color:var(--ink2)}.seg button.on{background:var(--card);color:var(--ink);box-shadow:var(--shadow2)}
+/* nav */
+.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom));width:min(94vw,460px);height:72px;border-radius:36px;background:var(--glass);backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);box-shadow:0 10px 34px rgba(107,91,149,.25);border:1px solid rgba(255,255,255,.5);display:grid;grid-template-columns:1fr 1fr 84px 1fr 1fr;align-items:center;z-index:40;padding:0 6px}
+.dark .nav{border-color:rgba(255,255,255,.08)}
+.nav button.t{display:flex;flex-direction:column;align-items:center;gap:1px;font-size:10.5px;font-weight:700;color:var(--muted);min-height:56px;justify-content:center}
+.nav button.t .ip{width:46px;height:30px;border-radius:15px;display:grid;place-items:center;transition:.25s}
+.nav button.t.on{color:var(--ink)}.nav button.t.on .ip{background:var(--pinksoft)}
+.nav .plus{width:62px;height:62px;border-radius:50%;background:var(--btn);color:var(--onbtn);display:grid;place-items:center;margin:-22px auto 0;box-shadow:0 8px 20px rgba(30,43,77,.4);border:4px solid var(--bg);transition:transform .2s}
+.nav .plus:active{transform:scale(.92) rotate(90deg)}.nav .plus .ic{width:28px;height:28px;stroke-width:2.6}
+/* grid */
+.grid{display:grid;gap:10px;grid-template-columns:repeat(var(--cols),1fr)}
+.tile{position:relative;aspect-ratio:1;border-radius:20px;background:var(--card2);overflow:hidden;display:grid;place-items:center;transition:transform .15s;box-shadow:inset 0 0 0 1px var(--line);padding:0;width:100%}
+.tile:active{transform:scale(.95)}
+.tile img.ph{width:100%;height:100%;object-fit:cover}.tile img.ph.cut{object-fit:contain;padding:8%}
+.tile .art{width:62%;height:62%}
+.bdg{position:absolute;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:var(--card);box-shadow:var(--shadow2)}
+.bdg .ic{width:12px;height:12px}.cols5 .bdg{width:16px;height:16px}.cols5 .bdg .ic{width:10px;height:10px}
+.bdg.h{left:5px;top:5px;color:var(--pink)}.bdg.p{right:5px;top:5px;color:var(--ink2)}.bdg.e{right:5px;bottom:5px;width:11px;height:11px;background:var(--warn)}.bdg.e.bad{background:var(--bad)}
+.tile .chk{position:absolute;inset:0;background:rgba(240,140,163,.28);display:grid;place-items:center}
+.tile .chk span{width:28px;height:28px;border-radius:50%;background:var(--pink);color:#fff;display:grid;place-items:center}
+.tname{font-size:11px;font-weight:600;margin-top:4px;text-align:center;color:var(--ink2)}
+/* basket */
+.basket{display:flex;gap:10px;overflow-x:auto;padding:6px 18px 12px;margin:0 -18px;scrollbar-width:none}.basket::-webkit-scrollbar{display:none}
+.bcard{position:relative;flex:none;width:112px;background:var(--card);border-radius:22px;box-shadow:var(--shadow2);padding:8px;text-align:center;touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;cursor:pointer;transition:transform .12s}
+.bcard:active{transform:scale(.96)}
+.bcard .ph{aspect-ratio:1;border-radius:16px;background:var(--card2);display:grid;place-items:center;overflow:hidden}.bcard .ph img{width:100%;height:100%;object-fit:cover}.bcard .ph img.cut{object-fit:contain;padding:6%}.bcard .ph .art{width:60%;height:60%}
+.bcard .nm{font-size:12px;font-weight:700;margin:6px 2px 2px;min-height:30px}
+.bcard .ct{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;background:var(--card2);color:var(--ink2)}
+.bcard.done .ct{background:var(--okbg);color:var(--ok)}
+.bcard .info{position:absolute;right:4px;top:4px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.85);color:var(--ink2);display:grid;place-items:center}
+.dark .bcard .info{background:rgba(42,31,61,.8)}.bcard .info .ic{width:14px;height:14px}
+.burst{position:absolute;left:50%;top:40%;pointer-events:none;z-index:5}
+.burst i{position:absolute;font-style:normal;font-size:16px;animation:bst .8s ease-out forwards;opacity:0}
+@keyframes bst{0%{transform:translate(0,0) scale(.3);opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(1.1) rotate(var(--r));opacity:0}}
+.pop{animation:pop .35s}@keyframes pop{40%{transform:scale(1.08)}}
+/* pages & sheets */
+.page{position:fixed;inset:0;background:var(--bg);z-index:50;overflow-y:auto;overscroll-behavior:contain}
+.page.enter{animation:slideup .28s ease-out}@keyframes slideup{from{transform:translateY(24px);opacity:0}}
+.page .inner{max-width:720px;margin:0 auto;padding:0 18px calc(40px + env(safe-area-inset-bottom))}
+.page .inner.abp{padding-bottom:calc(120px + env(safe-area-inset-bottom))}
+.hdr{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:calc(12px + env(safe-area-inset-top)) 0 12px}
+.hdr h2{flex:1;text-align:center}.hdr .sp{width:44px}
+.sheetbg{position:fixed;inset:0;background:rgba(30,20,50,.45);z-index:80;animation:fade .2s}@keyframes fade{from{opacity:0}}
+.sheet{position:fixed;left:0;right:0;bottom:0;margin:0 auto;max-width:560px;max-height:90vh;overflow-y:auto;background:var(--bg);border-radius:30px 30px 0 0;padding:10px 20px calc(26px + env(safe-area-inset-bottom));z-index:81;animation:slideup .25s ease-out;box-shadow:0 -10px 40px rgba(0,0,0,.2)}
+.sheet .grab{width:44px;height:5px;border-radius:3px;background:var(--chip);margin:4px auto 14px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(108px + env(safe-area-inset-bottom));background:var(--btn);color:var(--onbtn);padding:8px 8px 8px 18px;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,.25);z-index:95;display:flex;align-items:center;gap:10px;font-weight:700;max-width:92vw;animation:slideup .25s}
+.toast button{min-height:40px;padding:0 14px;border-radius:99px;background:rgba(255,255,255,.18);font-weight:800;color:inherit}
+/* forms */
+.field{margin-top:14px}.field>label,.field>.lbl{display:block;margin-bottom:6px}
+.inp{width:100%;min-height:48px;border-radius:16px;border:2px solid transparent;background:var(--card);padding:0 14px;box-shadow:var(--shadow2);outline:none;transition:border-color .2s}
+.inp:focus{border-color:var(--pink)}.inp.err{border-color:var(--bad)}
+textarea.inp{padding:12px 14px;min-height:80px;resize:vertical}
+.errm{color:var(--bad);font-size:13px;font-weight:600;margin-top:5px}
+.hint{font-size:12.5px;color:var(--muted);margin-top:5px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+input[type=range]{width:100%;height:44px;accent-color:var(--pink);background:transparent}
+.tog{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:48px}
+.sw{position:relative;width:54px;height:32px;border-radius:16px;background:var(--chip);flex:none;transition:.2s}.sw::after{content:"";position:absolute;left:3px;top:3px;width:26px;height:26px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 2px 6px rgba(0,0,0,.2)}.sw.on{background:var(--pink)}.sw.on::after{transform:translateX(22px)}
+.photoBox{aspect-ratio:1;max-width:220px;margin:0 auto;border-radius:28px;background:var(--card2);border:2px dashed var(--chip);display:grid;place-items:center;overflow:hidden;position:relative;color:var(--ink2);text-align:center}
+.photoBox img{width:100%;height:100%;object-fit:contain;background:repeating-conic-gradient(var(--card) 0 25%,var(--card2) 0 50%) 50%/16px 16px}
+.spin{width:22px;height:22px;border-radius:50%;border:3px solid var(--chip);border-top-color:var(--pink);animation:sp .8s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
+/* progress */
+.bar{height:12px;border-radius:8px;background:var(--card2);overflow:hidden}.bar>i{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,var(--pink2),var(--pink));transition:width .5s}
+.bar.ok>i{background:var(--ok)}.bar.warn>i{background:var(--warn)}.bar.bad>i{background:var(--bad)}
+.segs{display:flex;gap:4px}.segs i{flex:1;height:12px;border-radius:6px;background:var(--chip)}.segs i.on{background:linear-gradient(90deg,var(--pink2),var(--pink))}
+.stat{font-size:34px;font-weight:800;letter-spacing:-1px;line-height:1}
+.stepper{display:flex;align-items:center;justify-content:space-between;margin:8px 0}.stepper button{width:44px;height:44px;border-radius:50%;background:var(--card2);display:grid;place-items:center;color:var(--ink)}
+details.card{padding:0}details.card>summary{list-style:none;min-height:52px;padding:0 16px;display:flex;align-items:center;justify-content:space-between;font-weight:700;cursor:pointer}details.card>summary::-webkit-details-marker{display:none}details.card[open]>summary .ic{transform:rotate(180deg)}details.card .dd{padding:0 16px 16px}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--line)}.kv:last-child{border:0}.kv b{text-align:right;overflow-wrap:anywhere}
+.abar{position:fixed;left:0;right:0;bottom:0;z-index:55;display:flex;justify-content:center;padding:0 12px calc(12px + env(safe-area-inset-bottom));pointer-events:none}
+.abar>div{pointer-events:auto;width:min(100%,520px);display:grid;grid-template-columns:repeat(4,1fr);background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:28px;box-shadow:0 10px 30px rgba(107,91,149,.28);padding:6px}
+.abar button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:56px;border-radius:20px;font-size:11px;font-weight:700;color:var(--ink2)}.abar button.on{background:var(--pinksoft);color:var(--ink)}
+.list>*+*{margin-top:10px}
+.prow{display:flex;gap:12px;align-items:center;background:var(--card);border-radius:20px;padding:10px;box-shadow:var(--shadow2);width:100%;text-align:left}
+.prow .th{width:56px;height:56px;border-radius:16px;background:var(--card2);overflow:hidden;flex:none;display:grid;place-items:center}.prow .th img{width:100%;height:100%;object-fit:cover}.prow .th img.cut{object-fit:contain;padding:5%}.prow .th .art{width:70%;height:70%}
+.empty{text-align:center;padding:28px 10px}.empty p{margin:6px auto 0;max-width:280px;color:var(--ink2)}
+.banner{background:linear-gradient(135deg,#FFD9C2,#FFB3BF 60%,#F08CA3);color:#4a1630;border-radius:28px;padding:18px;display:flex;gap:12px;align-items:center;box-shadow:var(--shadow);width:100%;text-align:left;position:relative;overflow:hidden}
+.banner .ft{width:84px;height:84px;border-radius:22px;background:rgba(255,255,255,.55);overflow:hidden;flex:none;display:grid;place-items:center;transform:rotate(4deg)}.banner .ft img{width:100%;height:100%;object-fit:cover}.banner .ft img.cut{object-fit:contain;padding:6%}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.sbox{background:var(--card);border-radius:20px;padding:12px 6px;text-align:center;box-shadow:var(--shadow2)}.sbox b{display:block;font-size:26px;font-weight:800;line-height:1.1}
+.celeb{position:fixed;inset:0;z-index:70;background:linear-gradient(180deg,var(--pinksoft),var(--bg) 60%);overflow-y:auto;text-align:center;padding:calc(24px + env(safe-area-inset-top)) 20px 40px}
+.celeb .inner{max-width:440px;margin:0 auto}
+.pcheck{position:relative;width:150px;height:150px;margin:14px auto 8px}.pcheck .pi{width:100%;height:100%;border-radius:32px;background:var(--card);box-shadow:var(--shadow);overflow:hidden;display:grid;place-items:center;transform:rotate(-3deg)}.pcheck img{width:100%;height:100%;object-fit:cover}.pcheck img.cut{object-fit:contain;padding:6%}.pcheck .art{width:70%}
+.pcheck .ck{position:absolute;right:-10px;bottom:-10px;width:46px;height:46px;border-radius:50%;background:var(--pink);color:#fff;display:grid;place-items:center;border:4px solid var(--bg)}
+.photos{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.ptile{position:relative;aspect-ratio:1;border-radius:20px;overflow:hidden;background:var(--card2);width:100%}.ptile img{width:100%;height:100%;object-fit:cover}.ptile span{position:absolute;left:6px;right:6px;bottom:6px;background:rgba(30,43,77,.72);color:#fff;font-size:11px;font-weight:700;padding:5px 8px;border-radius:12px;backdrop-filter:blur(6px)}
+.sharecv{width:100%;border-radius:20px;box-shadow:var(--shadow);background:#fff}
+.badge{text-align:center;padding:12px 6px;border-radius:20px;background:var(--card);box-shadow:var(--shadow2)}.badge.lock{opacity:.45;filter:grayscale(1)}.badge .em{font-size:30px}.badge b{display:block;font-size:12px;margin-top:2px}
+.warnbar{background:var(--warnbg);color:#8a5200;border-radius:16px;padding:10px 14px;font-size:13px;font-weight:600}.dark .warnbar{color:#FFC76B}
+.fade-in{animation:fade .3s}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+@media (min-width:700px){.page .inner,.wrap{padding-left:28px;padding-right:28px}.chips,.basket{margin:0 -28px;padding-left:28px;padding-right:28px}}
+</style>
+</head>
+<body>
+<div id="app"><div id="view"></div></div>
+<nav class="nav" id="nav" aria-label="Main"></nav>
+<div id="pages"></div>
+<div id="celeb"></div>
+<div id="sheetRoot"></div>
+<div id="toastRoot"></div>
+<canvas id="confetti" style="position:fixed;inset:0;pointer-events:none;z-index:120;width:100%;height:100%"></canvas>
+<script>
+'use strict';
+/* =====================================================================
+   PROJECT PAN — single-file offline-first makeup tracker
+   Rename the app here (also edit <title>/manifest for the installed name)
+   ===================================================================== */
+const APP_NAME = 'Project Pan';
+const TZ = 'Asia/Kolkata';
+document.title = APP_NAME;
+
+/* ---------- tiny helpers ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+const clamp = (n, a, b) => Math.min(b, Math.max(a, n));
+const plural = (n, w, p) => `${n} ${n === 1 ? w : (p || w + 's')}`;
+
+/* ---------- dates (all in Asia/Kolkata, day boundary at local midnight) ---------- */
+const _fmtDay = new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' });
+const dayKey = ts => _fmtDay.format(ts);                 // "YYYY-MM-DD"
+const today = () => dayKey(Date.now());
+const dnum = k => { const [y, m, d] = k.split('-').map(Number); return Math.round(Date.UTC(y, m - 1, d) / 864e5); };
+const fromNum = n => new Date(n * 864e5).toISOString().slice(0, 10);
+const addDays = (k, n) => fromNum(dnum(k) + n);
+const addMonths = (k, n) => {
+  const [y, m, d] = k.split('-').map(Number);
+  const t = new Date(Date.UTC(y, m - 1 + n, 1));
+  const last = new Date(Date.UTC(t.getUTCFullYear(), t.getUTCMonth() + 1, 0)).getUTCDate();
+  return fromNum(Math.round(Date.UTC(t.getUTCFullYear(), t.getUTCMonth(), Math.min(d, last)) / 864e5));
+};
+const diffDays = (a, b) => dnum(a) - dnum(b);
+const validDate = k => /^\d{4}-\d{2}-\d{2}$/.test(k || '') && !isNaN(Date.parse(k + 'T00:00:00Z'));
+const fmtDate = (k, short) => validDate(k) ? new Date(k + 'T00:00:00Z').toLocaleDateString('en-IN', { timeZone: 'UTC', day: 'numeric', month: 'short', ...(short ? {} : { year: 'numeric' }) }) : '—';
+const fmtMonthYear = k => validDate(k) ? new Date(k + 'T00:00:00Z').toLocaleDateString('en-IN', { timeZone: 'UTC', month: 'short', year: 'numeric' }) : '—';
+const fmtTime = ts => new Date(ts).toLocaleTimeString('en-IN', { timeZone: TZ, hour: 'numeric', minute: '2-digit' });
+const monthKey = k => k.slice(0, 7);
+
+/* ---------- number / money ---------- */
+const nfInt = new Intl.NumberFormat('en-IN');
+const inr = (v, dec) => {
+  if (v == null || !isFinite(v)) return '—';
+  const d = dec ?? (Math.abs(v % 1) < 0.005 ? 0 : 2);
+  return '₹' + new Intl.NumberFormat('en-IN', { minimumFractionDigits: d, maximumFractionDigits: d }).format(v);
+};
+
+/* ---------- constants ---------- */
+const BASE_CATS = ['Face', 'Eyes', 'Lips', 'Cheeks', 'Skincare', 'Tools', 'Other'];
+const CAT_EMOJI = { All: '✨', Face: '🌸', Eyes: '👀', Lips: '💋', Cheeks: '🍑', Skincare: '🧴', Tools: '🖌️', 'Holy grail': '👑', Other: '🎀' };
+const CAT_DEFAULT_USES = { Face: 100, Eyes: 80, Lips: 60, Cheeks: 90, Skincare: 60, Tools: 200, Other: 60 };
+const FINISHES = ['Matte', 'Dewy', 'Shimmer', 'Satin', 'Glossy', 'Cream', 'Natural', 'Metallic'];
+const PAOS = [3, 6, 9, 12, 18, 24, 36];
+const MILESTONES = [1, 5, 10, 25, 50, 100];
+const BADGES = [
+  { id: 'f1', em: '🌱', name: 'First empty', test: s => s.fin >= 1 },
+  { id: 'f5', em: '🌷', name: '5 empties', test: s => s.fin >= 5 },
+  { id: 'f10', em: '🌸', name: '10 empties', test: s => s.fin >= 10 },
+  { id: 'f25', em: '👑', name: '25 empties', test: s => s.fin >= 25 },
+  { id: 's3', em: '✨', name: '3-day streak', test: s => s.best >= 3 },
+  { id: 's7', em: '🔥', name: '7-day streak', test: s => s.best >= 7 },
+  { id: 's30', em: '🌙', name: '30-day streak', test: s => s.best >= 30 },
+  { id: 's100', em: '💎', name: '100-day streak', test: s => s.best >= 100 },
+  { id: 'u50', em: '💄', name: '50 uses logged', test: s => s.logs >= 50 },
+  { id: 'u250', em: '🎀', name: '250 uses logged', test: s => s.logs >= 250 },
+];
+
+/* =====================================================================
+   STORAGE — IndexedDB first, localStorage fallback. Never throws.
+   State JSON lives in store "kv"; photos live in store "img" (id -> dataURL)
+   ===================================================================== */
+const Store = {
+  db: null, mode: 'idb', warned: false,
+  async init() {
+    try {
+      if (!('indexedDB' in window)) throw new Error('no idb');
+      this.db = await new Promise((res, rej) => {
+        const r = indexedDB.open('project-pan', 1);
+        r.onupgradeneeded = () => { const d = r.result; d.createObjectStore('kv'); d.createObjectStore('img'); };
+        r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); r.onblocked = () => rej(new Error('blocked'));
+      });
+    } catch (e) { this.mode = 'ls'; this.db = null; }
+  },
+  _tx(store, mode, fn) {
+    return new Promise(res => {
+      try {
+        const t = this.db.transaction(store, mode); const os = t.objectStore(store); let out;
+        const r = fn(os); if (r) r.onsuccess = () => { out = r.result; };
+        t.oncomplete = () => res({ ok: true, v: out }); t.onerror = t.onabort = () => res({ ok: false });
+      } catch (e) { res({ ok: false }); }
+    });
+  },
+  async get(store, key) {
+    try {
+      if (this.mode === 'idb') { const r = await this._tx(store, 'readonly', os => os.get(key)); return r.ok ? r.v ?? null : null; }
+      const v = localStorage.getItem(`pp_${store}_${key}`); return v == null ? null : (store === 'kv' ? JSON.parse(v) : v);
+    } catch (e) { return null; }
+  },
+  async set(store, key, val) {
+    try {
+      if (this.mode === 'idb') { const r = await this._tx(store, 'readwrite', os => os.put(val, key)); if (!r.ok) throw new Error('write'); return true; }
+      localStorage.setItem(`pp_${store}_${key}`, store === 'kv' ? JSON.stringify(val) : val); return true;
+    } catch (e) { this.fail(); return false; }
+  },
+  async del(store, key) {
+    try {
+      if (this.mode === 'idb') { await this._tx(store, 'readwrite', os => os.delete(key)); return; }
+      localStorage.removeItem(`pp_${store}_${key}`);
+    } catch (e) { /* ignore */ }
+  },
+  async all(store) {
+    const out = {};
+    try {
+      if (this.mode === 'idb') {
+        await new Promise(res => {
+          try {
+            const t = this.db.transaction(store, 'readonly'); const c = t.objectStore(store).openCursor();
+            c.onsuccess = () => { const cur = c.result; if (cur) { out[cur.key] = cur.value; cur.continue(); } };
+            t.oncomplete = t.onerror = t.onabort = () => res();
+          } catch (e) { res(); }
+        });
+      } else {
+        for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith(`pp_${store}_`)) out[k.slice(store.length + 4)] = localStorage.getItem(k); }
+      }
+    } catch (e) { /* ignore */ }
+    return out;
+  },
+  fail() { if (!this.warned) { this.warned = true; toast('Couldn’t save — storage may be full. Try exporting a backup.'); } setTimeout(() => { this.warned = false; }, 8000); },
+  async usage() {
+    try { if (navigator.storage && navigator.storage.estimate) { const e = await navigator.storage.estimate(); if (e.quota) return { used: e.usage, quota: e.quota }; } } catch (e) { /* ignore */ }
+    return null;
+  },
+};
+
+/* =====================================================================
+   STATE
+   ===================================================================== */
+const blankState = () => ({
+  v: 1, settings: { dark: false, cols: 4, sort: 'added', basketCollapsed: false, onboarded: false, customCats: [], started: today() },
+  products: [], basket: [], wishlist: [], challenges: [], projectIds: [], resets: [], badgesSeen: [],
+});
+let S = blankState();
+let IMG = {};            // imgId -> dataURL
+let saveTimer = null;
+function save() { clearTimeout(saveTimer); saveTimer = setTimeout(saveNow, 250); }
+async function saveNow() { clearTimeout(saveTimer); await Store.set('kv', 'state', S); }
+window.addEventListener('pagehide', () => { try { if (saveTimer) saveNow(); } catch (e) { /* ignore */ } });
+document.addEventListener('visibilitychange', () => { if (document.hidden && saveTimer) saveNow(); });
+
+/** Make any loaded/imported object safe to use. Returns null if unusable. */
+function normalize(raw) {
+  if (!raw || typeof raw !== 'object' || !Array.isArray(raw.products)) return null;
+  const n = blankState();
+  const num = (v, d = null) => (v === null || v === undefined || v === '' || isNaN(+v)) ? d : +v;
+  const str = (v, d = '') => typeof v === 'string' ? v : d;
+  const date = v => validDate(v) ? v : null;
+  Object.assign(n.settings, raw.settings && typeof raw.settings === 'object' ? raw.settings : {});
+  n.settings.cols = [3, 4, 5].includes(n.settings.cols) ? n.settings.cols : 4;
+  if (!Array.isArray(n.settings.customCats)) n.settings.customCats = [];
+  n.products = raw.products.filter(p => p && typeof p === 'object' && typeof p.id === 'string').map(p => {
+    const logs = (Array.isArray(p.logs) ? p.logs : []).filter(l => l && isFinite(l.ts)).map(l => ({ id: str(l.id) || uid(), ts: +l.ts, day: validDate(l.day) ? l.day : dayKey(+l.ts) })).sort((a, b) => a.ts - b.ts);
+    return {
+      id: p.id, name: str(p.name, 'Untitled').slice(0, 120) || 'Untitled', brand: str(p.brand).slice(0, 80), cat: str(p.cat, 'Other') || 'Other',
+      price: num(p.price), shade: str(p.shade).slice(0, 80), finish: str(p.finish).slice(0, 40), expected: Math.max(1, Math.round(num(p.expected, 60))),
+      img: str(p.img) || null, bgRemoved: !!p.bgRemoved, where: str(p.where).slice(0, 80), bought: date(p.bought), gift: !!p.gift,
+      opened: date(p.opened), openedApprox: !!p.openedApprox, pao: num(p.pao), startDate: date(p.startDate), startAuto: !!p.startAuto, finishDate: date(p.finishDate),
+      status: ['active', 'finished', 'archived'].includes(p.status) ? p.status : 'active', inUse: !!p.inUse, partly: !!p.partly,
+      pctBase: clamp(num(p.pctBase, 100), 0, 100), baseLogs: clamp(Math.round(num(p.baseLogs, 0)), 0, logs.length), estPast: Math.max(0, Math.round(num(p.estPast, 0))),
+      fav: !!p.fav, added: num(p.added, Date.now()), logs, verdict: ['yes', 'maybe', 'no'].includes(p.verdict) ? p.verdict : null, note: str(p.note).slice(0, 300), sample: !!p.sample,
+      photos: (Array.isArray(p.photos) ? p.photos : []).filter(x => x && typeof x.img === 'string').map(x => ({ id: str(x.id) || uid(), img: x.img, ts: num(x.ts, Date.now()), uses: Math.max(0, Math.round(num(x.uses, 0))), pct: clamp(Math.round(num(x.pct, 0)), 0, 100) })),
+    };
+  });
+  const ids = new Set(n.products.map(p => p.id));
+  n.basket = (Array.isArray(raw.basket) ? raw.basket : []).filter(id => ids.has(id));
+  n.projectIds = (Array.isArray(raw.projectIds) ? raw.projectIds : []).filter(id => ids.has(id));
+  n.wishlist = (Array.isArray(raw.wishlist) ? raw.wishlist : []).filter(w => w && typeof w.id === 'string' && typeof w.name === 'string').map(w => ({ id: w.id, name: w.name.slice(0, 120), price: num(w.price), link: str(w.link).slice(0, 300), img: str(w.img) || null, added: num(w.added, Date.now()), sample: !!w.sample }));
+  n.challenges = (Array.isArray(raw.challenges) ? raw.challenges : []).filter(c => c && typeof c.id === 'string' && validDate(c.start) && validDate(c.end)).map(c => ({ id: c.id, title: str(c.title, 'Challenge').slice(0, 80), target: clamp(Math.round(num(c.target, 5)), 1, 500), start: c.start, end: c.end, sample: !!c.sample }));
+  n.resets = (Array.isArray(raw.resets) ? raw.resets : []).filter(validDate);
+  n.badgesSeen = (Array.isArray(raw.badgesSeen) ? raw.badgesSeen : []).filter(x => typeof x === 'string');
+  return n;
+}
+
+/* =====================================================================
+   PRODUCT MATHS  (kept in one place so every screen agrees)
+   ===================================================================== */
+const byId = id => S.products.find(p => p.id === id);
+const activeProducts = () => S.products.filter(p => p.status === 'active');
+const finishedProducts = () => S.products.filter(p => p.status === 'finished');
+const src = id => (id && IMG[id]) || '';
+const loggedUses = p => p.logs.length;
+const totalUses = p => (p.estPast || 0) + p.logs.length;           // estimated past + logged in app
+const expectedUses = p => Math.max(1, Math.round(p.expected || 1));
+/** uses remaining = uses implied by % left at last calibration, minus uses logged since. Never negative. */
+const usesRemaining = p => Math.max(0, Math.round(expectedUses(p) * p.pctBase / 100) - (p.logs.length - p.baseLogs));
+const pctLeft = p => clamp(Math.round(usesRemaining(p) / expectedUses(p) * 100), 0, 100);
+const isEstimated = p => (p.estPast || 0) > 0;
+function costPerUse(p) {
+  if (p.price == null || !isFinite(p.price)) return null;
+  const n = totalUses(p); if (n <= 0) return null;
+  return p.price / n;
+}
+const cpuText = p => { const c = costPerUse(p); return c == null ? '—' : (isEstimated(p) ? '~' : '') + inr(c, 2); };
+function logsInLastDays(p, days) { const cut = addDays(today(), -(days - 1)); return p.logs.filter(l => l.day >= cut); }
+/** Estimated finish uses ONLY uses logged in the app during the last 30 days. */
+function estFinish(p) {
+  const rem = usesRemaining(p);
+  if (rem === 0) return { state: 'done' };
+  const recent = logsInLastDays(p, 30);
+  if (recent.length < 3) return { state: 'need' };
+  const first = recent[0].day;
+  const span = clamp(diffDays(today(), first) + 1, 7, 30);
+  const perDay = recent.length / span;
+  const days = Math.ceil(rem / perDay);
+  if (!isFinite(days) || days > 3650) return { state: 'need' };
+  return { state: 'ok', date: addDays(today(), days), days };
+}
+const estText = p => { const e = estFinish(p); return e.state === 'ok' ? fmtDate(e.date, true) : e.state === 'done' ? 'Almost there' : '—'; };
+function expiryInfo(p) {
+  if (!p.opened || !p.pao) return null;
+  const exp = addMonths(p.opened, p.pao);
+  const left = diffDays(exp, today());
+  const span = Math.max(1, diffDays(exp, p.opened));
+  const pctUsed = clamp((1 - left / span) * 100, 0, 100);
+  const cls = left < 0 ? 'bad' : left <= 30 ? 'warn' : 'ok';
+  let text;
+  if (left < 0) text = `Expired ${plural(-left, 'day')} ago`;
+  else if (left === 0) text = 'Expires today';
+  else if (left < 60) text = `${plural(left, 'day')} left`;
+  else text = `${plural(Math.round(left / 30.4), 'month')} left`;
+  return { exp, left, cls, text, pctUsed, soon: left <= 30 };
+}
+function daysLasted(p) {
+  if (!p.finishDate) return null;
+  const start = p.startDate || dayKey(p.added);
+  return Math.max(1, diffDays(p.finishDate, start) + 1);
+}
+const usesToday = p => p.logs.filter(l => l.day === today()).length;
+
+/** Suggested expected uses from my finished (not partly tracked) products in the same category. */
+function suggestExpected(cat, excludeId) {
+  const fin = finishedProducts().filter(p => p.cat === cat && !p.partly && p.id !== excludeId && p.logs.length > 0);
+  if (fin.length) return { n: Math.max(1, Math.round(fin.reduce((a, p) => a + p.logs.length, 0) / fin.length)), from: fin.length };
+  return { n: CAT_DEFAULT_USES[cat] || 60, from: 0 };
+}
+
+/* streaks (only uses logged in the app) */
+function logDays() { const set = new Set(); S.products.forEach(p => p.logs.forEach(l => set.add(l.day))); return [...set].sort(); }
+function streaks() {
+  const days = logDays(); if (!days.length) return { cur: 0, best: 0 };
+  let best = 1, run = 1;
+  for (let i = 1; i < days.length; i++) { run = diffDays(days[i], days[i - 1]) === 1 ? run + 1 : 1; best = Math.max(best, run); }
+  const set = new Set(days); let cur = 0; let d = today();
+  if (!set.has(d)) d = addDays(d, -1);
+  while (set.has(d)) { cur++; d = addDays(d, -1); }
+  return { cur, best };
+}
+const statsForBadges = () => ({ fin: finishedProducts().length, best: streaks().best, logs: S.products.reduce((a, p) => a + p.logs.length, 0) });
+const earnedBadges = () => { const st = statsForBadges(); return BADGES.filter(b => b.test(st)); };
+
+/* challenges */
+function challengeProgress(c) { return finishedProducts().filter(p => p.finishDate && p.finishDate >= c.start && p.finishDate <= c.end).length; }
+function currentChallenge() {
+  const t = today();
+  const act = S.challenges.filter(c => c.end >= t && c.start <= t && challengeProgress(c) < c.target).sort((a, b) => a.end.localeCompare(b.end));
+  return act[0] || null;
+}
+
+/* no-buy tracker: last purchase date from products (gifts excluded) + manual resets */
+function noBuy() {
+  const t = today();
+  const ev = new Set([S.settings.started, ...S.resets]);
+  S.products.forEach(p => { if (p.bought && !p.gift && p.bought <= t) ev.add(p.bought); });
+  const arr = [...ev].filter(d => d <= t).sort(); arr.push(t);
+  let best = 0; for (let i = 1; i < arr.length; i++) best = Math.max(best, diffDays(arr[i], arr[i - 1]));
+  const last = arr[arr.length - 2];
+  return { days: Math.max(0, diffDays(t, last)), best: Math.max(best, 0), last };
+}
+/* =====================================================================
+   ART — icons, original duckling mascot, tiny makeup illustrations
+   ===================================================================== */
+const ICONS = {
+  home: '<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/>',
+  target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  stat: '<path d="M6 20v-8M12 20V5M18 20v-5"/>',
+  user: '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>',
+  heart: '<path d="M12 20.5S3.5 15.4 3.5 9.3A4.6 4.6 0 0 1 12 6.8a4.6 4.6 0 0 1 8.5 2.5c0 6.100-8.500 11.200-8.500 11.200z"/>',
+  folderHeart: '<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M12 17s-3.200-2-3.200-4a1.800 1.800 0 0 1 3.200-.9 1.800 1.800 0 0 1 3.200.9c0 2-3.200 4-3.200 4z"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  search: '<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>',
+  filter: '<path d="M3 5h18l-7 8v6l-4-2v-4z"/>',
+  select: '<rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.500 12l2.500 2.500L16 9.500"/>',
+  sort: '<path d="M8 4v16M4 16l4 4 4-4M16 20V4M12 8l4-4 4 4"/>',
+  grid: '<rect x="4" y="4" width="6" height="6" rx="1.500"/><rect x="14" y="4" width="6" height="6" rx="1.500"/><rect x="4" y="14" width="6" height="6" rx="1.500"/><rect x="14" y="14" width="6" height="6" rx="1.500"/>',
+  x: '<path d="M6 6l12 12M18 6L6 18"/>',
+  back: '<path d="M15 5l-7 7 7 7"/>',
+  pencil: '<path d="M4 20l1-4L16 5l3 3L8 19z"/><path d="M14 7l3 3"/>',
+  palette: '<path d="M12 3a9 9 0 0 0 0 18c1.500 0 2-1 1.500-2-.600-1.300.300-2.500 1.700-2.500H17a4 4 0 0 0 4-4c0-5-4-9.500-9-9.500z"/><circle cx="8" cy="11" r="1" class="f"/><circle cx="12" cy="7.500" r="1" class="f"/><circle cx="16" cy="11" r="1" class="f"/>',
+  check: '<path d="M5 12.500l4.500 4.500L19 7"/>',
+  trash: '<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>',
+  copy: '<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/>',
+  archive: '<rect x="3" y="4" width="18" height="5" rx="1"/><path d="M5 9v10h14V9M10 13h4"/>',
+  share: '<path d="M12 15V3M8 7l4-4 4 4"/><path d="M5 12v8h14v-8"/>',
+  camera: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.500"/>',
+  chev: '<path d="M9 6l6 6-6 6"/>', chevd: '<path d="M6 9l6 6 6-6"/>',
+  minus: '<path d="M5 12h14"/>',
+  gift: '<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M5 12v9h14v-9M12 8C10 4 6 5 7.500 8M12 8c2-4 6-3 4.500 0"/>',
+  jar: '<path d="M7 9h10v1.500a3 3 0 0 1 1 2.200V19a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-6.300a3 3 0 0 1 1-2.200z"/><path d="M6 6l9-2.500.8 2.300"/>',
+  down: '<path d="M12 3v12M8 11l4 4 4-4"/><path d="M5 20h14"/>', up: '<path d="M12 15V3M8 7l4-4 4 4"/><path d="M5 20h14"/>',
+  refresh: '<path d="M20 11a8 8 0 1 0-2.300 6"/><path d="M20 4v7h-7"/>',
+  arrowU: '<path d="M12 19V5M6 11l6-6 6 6"/>', arrowD: '<path d="M12 5v14M6 13l6 6 6-6"/>',
+  moon: '<path d="M20 14.500A8 8 0 0 1 9.500 4 8 8 0 1 0 20 14.500z"/>',
+  bag: '<path d="M5 8h14l-1 12H6z"/><path d="M9 8a3 3 0 0 1 6 0"/>',
+  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.500 1.500M17.500 17.500L19 19M5 19l1.500-1.500M17.500 6.500L19 5"/>',
+};
+const ic = (n, cls = '') => `<svg class="ic ${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[n] || ''}</svg>`;
+
+const sparkleSVG = (x, y, s, c = '#F08CA3') => `<path transform="translate(${x} ${y}) scale(${s})" d="M0-10C1.500-4 4-1.500 10 0 4 1.500 1.500 4 0 10-1.500 4-4 1.500-10 0-4-1.500-1.500-4 0-10z" fill="${c}"/>`;
+
+/** Original cute white duckling with a pink bow, rosy cheeks and sparkles. */
+function duck(size = 120, opt = {}) {
+  const w = opt.wave ? '<g><animateTransform attributeName="transform" type="rotate" values="0 150 120;-12 150 120;0 150 120" dur="1.2s" repeatCount="indefinite"/></g>' : '';
+  const eyes = opt.happy
+    ? '<path d="M76 84q6-7 12 0M112 84q6-7 12 0" stroke="#1E2B4D" stroke-width="4" fill="none" stroke-linecap="round"/>'
+    : '<circle cx="82" cy="84" r="5.500" fill="#1E2B4D"/><circle cx="118" cy="84" r="5.500" fill="#1E2B4D"/><circle cx="84" cy="82" r="1.800" fill="#fff"/><circle cx="120" cy="82" r="1.800" fill="#fff"/>';
+  return `<svg width="${size}" height="${size}" viewBox="0 0 200 200" role="img" aria-label="Cute duckling mascot" style="overflow:visible">
+  <ellipse cx="100" cy="187" rx="48" ry="7" fill="#6B5B95" opacity=".15"/>
+  <g stroke="#fff" stroke-width="9" stroke-linejoin="round" fill="#fff" opacity=".95"><ellipse cx="100" cy="140" rx="54" ry="42"/><circle cx="100" cy="80" r="46"/></g>
+  <ellipse cx="86" cy="181" rx="13" ry="6" fill="#FFB07A" stroke="#1E2B4D" stroke-width="3.500"/><ellipse cx="114" cy="181" rx="13" ry="6" fill="#FFB07A" stroke="#1E2B4D" stroke-width="3.500"/>
+  <ellipse cx="100" cy="140" rx="52" ry="40" fill="#fff" stroke="#1E2B4D" stroke-width="4"/>
+  <path d="M146 124c14 4 18 22 6 34-10 8-26 4-30-6 14 2 24-8 24-28z" fill="#F3F1FC" stroke="#1E2B4D" stroke-width="3.500" stroke-linejoin="round"/>
+  <path d="M60 130c-12 4-14 20-4 28 6 4 14 2 18-2" fill="#F3F1FC" stroke="#1E2B4D" stroke-width="3.500" stroke-linecap="round"/>
+  <circle cx="100" cy="80" r="44" fill="#fff" stroke="#1E2B4D" stroke-width="4"/>
+  <path d="M94 38c-4-10 6-16 12-10-6 0-6 6-2 10z" fill="#fff" stroke="#1E2B4D" stroke-width="3.500" stroke-linejoin="round"/>
+  ${eyes}
+  <circle cx="68" cy="98" r="9" fill="#FFB3BF" opacity=".85"/><circle cx="132" cy="98" r="9" fill="#FFB3BF" opacity=".85"/>
+  <ellipse cx="100" cy="98" rx="12" ry="8" fill="#FFB07A" stroke="#1E2B4D" stroke-width="3.500"/><path d="M93 98q7 4 14 0" stroke="#1E2B4D" stroke-width="2.500" fill="none" stroke-linecap="round"/>
+  <g transform="translate(131 44) rotate(18)"><path d="M0 0L-24-13C-30-4-30 4-24 13z" fill="#F08CA3" stroke="#1E2B4D" stroke-width="3.500" stroke-linejoin="round"/><path d="M0 0L24-13C30-4 30 4 24 13z" fill="#F08CA3" stroke="#1E2B4D" stroke-width="3.500" stroke-linejoin="round"/><circle r="7" fill="#FFB3BF" stroke="#1E2B4D" stroke-width="3.500"/></g>
+  ${opt.sparkle === false ? '' : sparkleSVG(22, 46, 1.1) + sparkleSVG(182, 100, .9, '#B7A6F0') + sparkleSVG(32, 130, .6, '#FFB3BF') + sparkleSVG(172, 22, .7, '#FFB3BF')}
+  ${w}
+  </svg>`;
+}
+
+const ART = {
+  lip: '<svg class="art" viewBox="0 0 60 60"><rect x="19" y="32" width="22" height="20" rx="4" fill="#1E2B4D"/><rect x="21" y="26" width="18" height="8" rx="2" fill="#E4DEF7" stroke="#1E2B4D" stroke-width="2"/><path d="M22 26V14q8-7 16 0v12z" fill="#F08CA3" stroke="#1E2B4D" stroke-width="2" stroke-linejoin="round"/><path d="M26 15q2-3 5-3" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" opacity=".7"/></svg>',
+  brush: '<svg class="art" viewBox="0 0 60 60"><rect x="27" y="26" width="6" height="30" rx="3" fill="#B7A6F0" stroke="#1E2B4D" stroke-width="2"/><rect x="25" y="22" width="10" height="9" rx="1" fill="#E4DEF7" stroke="#1E2B4D" stroke-width="2"/><path d="M25 22C22 12 28 5 30 4c2 1 8 8 5 18z" fill="#FFB3BF" stroke="#1E2B4D" stroke-width="2" stroke-linejoin="round"/></svg>',
+  compact: '<svg class="art" viewBox="0 0 60 60"><circle cx="30" cy="31" r="22" fill="#fff" stroke="#1E2B4D" stroke-width="2"/><circle cx="30" cy="31" r="15" fill="#FFB3BF" stroke="#1E2B4D" stroke-width="2"/><path d="M22 28q3-6 9-6" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".8"/><circle cx="30" cy="9" r="3" fill="#F08CA3" stroke="#1E2B4D" stroke-width="1.500"/></svg>',
+  bottle: '<svg class="art" viewBox="0 0 60 60"><rect x="24" y="6" width="12" height="9" rx="2" fill="#1E2B4D"/><rect x="17" y="15" width="26" height="40" rx="8" fill="#F3F1FC" stroke="#1E2B4D" stroke-width="2"/><rect x="17" y="30" width="26" height="14" fill="#FFB3BF"/><path d="M30 33l1.500 3 3 .5-2.200 2 .6 3-2.900-1.600L27 41.500l.6-3-2.200-2 3-.5z" fill="#fff"/></svg>',
+};
+const artFor = cat => ART[{ Lips: 'lip', Tools: 'brush', Face: 'compact', Eyes: 'compact', Cheeks: 'compact' }[cat] || 'bottle'];
+const catEmoji = c => CAT_EMOJI[c] || '🎀';
+/** product photo or tiny illustration */
+function pimg(p, cls = 'ph') {
+  const s = src(p.img);
+  return s ? `<img class="${cls}${p.bgRemoved ? ' cut' : ''}" src="${s}" alt="" loading="lazy" decoding="async">` : artFor(p.cat);
+}
+function emptyState(msg, sub, extra = '') {
+  return `<div class="empty fade-in"><div style="display:flex;justify-content:center;gap:4px;align-items:flex-end">${ART.compact.replace('class="art"', 'style="width:44px;opacity:.9"')}${duck(120, { wave: true })}${ART.lip.replace('class="art"', 'style="width:44px;opacity:.9"')}</div><h3 class="mt8">${esc(msg)}</h3><p>${esc(sub || '')}</p>${extra}</div>`;
+}
+/* =====================================================================
+   UI STATE + RENDER INFRASTRUCTURE
+   ===================================================================== */
+const UI = {
+  tab: 'home', stack: [], cat: 'All', filters: { fav: false, expiring: false, estimated: false, project: false }, sort: 'added',
+  selMode: false, sel: new Set(), stat: { range: 'all', cat: 'All', status: 'active', sort: 'added' },
+  empties: { tab: 'finished', cat: 'All', verdict: 'all' }, searchQ: '', locked: false, fresh: -1, tabScroll: {}, histMore: {}, form: null,
+};
+const lock = (ms = 320) => { UI.locked = true; setTimeout(() => { UI.locked = false; }, ms); };
+
+function render() {
+  const dark = !!S.settings.dark;
+  document.documentElement.classList.toggle('dark', dark);
+  const tm = $('meta[name=theme-color]'); if (tm) tm.content = dark ? '#2A1F3D' : '#FFF1EE';
+  const scrolls = $$('.page').map(e => e.scrollTop);
+  const sy = window.scrollY;
+  $('#view').innerHTML = ({ home: viewHome, project: viewProject, stats: viewStats, profile: viewProfile })[UI.tab]();
+  $('#nav').innerHTML = navHTML();
+  $('#nav').style.display = UI.stack.length ? 'none' : '';
+  $('#view').style.display = UI.stack.length ? 'none' : '';
+  const pages = $('#pages');
+  pages.innerHTML = UI.stack.map((pg, i) => `<div class="page${i === UI.fresh ? ' enter' : ''}" data-pi="${i}" role="dialog" aria-modal="true">${pageHTML(pg)}</div>`).join('');
+  UI.fresh = -1;
+  $$('.page', pages).forEach((e, i) => { if (scrolls[i]) e.scrollTop = scrolls[i]; });
+  if (!UI.stack.length) window.scrollTo(0, UI.tabScroll[UI.tab] ?? sy);
+  $$('#view img, .page img').forEach(im => { im.onerror = () => { im.style.display = 'none'; }; });
+}
+window.addEventListener('scroll', () => { if (!UI.stack.length) UI.tabScroll[UI.tab] = window.scrollY; }, { passive: true });
+
+function navHTML() {
+  const t = (id, icn, label) => `<button class="t ${UI.tab === id ? 'on' : ''}" data-act="tab" data-v="${id}" aria-label="${label}" ${UI.tab === id ? 'aria-current="page"' : ''}><span class="ip">${ic(icn)}</span>${label}</button>`;
+  return t('home', 'home', 'Home') + t('project', 'target', 'Project') + `<button class="plus" data-act="addProduct" aria-label="Add product">${ic('plus')}</button>` + t('stats', 'stat', 'Statistic') + t('profile', 'user', 'Profile');
+}
+
+/* ---------- navigation (with history so the phone's back gesture closes pages) ---------- */
+function setTab(t) { if (UI.locked) return; lock(); UI.stack = []; UI.tab = t; UI.selMode = false; UI.sel.clear(); render(); window.scrollTo(0, UI.tabScroll[t] || 0); }
+function push(pg) {
+  if (UI.locked) return; lock();
+  UI.stack.push(pg); UI.fresh = UI.stack.length - 1;
+  try { history.pushState({ d: UI.stack.length }, ''); } catch (e) { /* ignore */ }
+  render(); $$('.page').slice(-1)[0]?.scrollTo(0, 0);
+}
+function pop() { if (!UI.stack.length) return; lock(); try { history.back(); } catch (e) { UI.stack.pop(); render(); } }
+window.addEventListener('popstate', () => {
+  if ($('#sheetRoot').firstChild) { closeSheet(true); try { history.pushState({ d: UI.stack.length }, ''); } catch (e) { /* ignore */ } return; }
+  if (UI.stack.length) { const top = UI.stack[UI.stack.length - 1]; if (top.form && UI.form && UI.form.dirty && !UI.form.leaving) { UI.form.leaving = false; } UI.stack.pop(); if (!UI.stack.some(p => p.form)) UI.form = null; render(); }
+});
+
+/* ---------- sheets / toasts / confirm ---------- */
+let sheetCb = null;
+function sheet(html, mount) {
+  closeSheet(true);
+  $('#sheetRoot').innerHTML = `<div class="sheetbg" data-act="closeSheet"></div><div class="sheet" role="dialog" aria-modal="true"><div class="grab"></div>${html}</div>`;
+  if (mount) mount($('#sheetRoot .sheet'));
+}
+function closeSheet(silent) { $('#sheetRoot').innerHTML = ''; sheetCb = null; shareCtx = null; }
+function confirmSheet({ title, msg, ok = 'Confirm', danger = false }, cb) {
+  sheet(`<h2>${esc(title)}</h2><p class="muted">${esc(msg || '')}</p><div class="row mt16"><button class="btn ghost grow" data-act="closeSheet">Cancel</button><button class="btn grow ${danger ? 'danger' : ''}" data-act="confirmOk">${esc(ok)}</button></div>`);
+  sheetCb = cb;
+}
+let toastTimer = null;
+function toast(msg, undo) {
+  clearTimeout(toastTimer);
+  $('#toastRoot').innerHTML = `<div class="toast" role="status"><span>${esc(msg)}</span>${undo ? '<button data-act="undo">Undo</button>' : ''}</div>`;
+  toastTimer = setTimeout(() => { $('#toastRoot').innerHTML = ''; }, undo ? 5000 : 3200);
+}
+
+/* ---------- fx ---------- */
+const haptic = (ms = 18) => { try { navigator.vibrate && navigator.vibrate(ms); } catch (e) { /* ignore */ } };
+function burstAt(el) {
+  if (!el) return;
+  el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
+  const b = document.createElement('div'); b.className = 'burst';
+  const em = ['✨', '💖', '✨', '💗', '⭐', '🌸', '✨', '💖'];
+  b.innerHTML = em.map((e, i) => { const a = (i / em.length) * Math.PI * 2, d = 42 + (i % 3) * 14; return `<i style="--dx:${Math.cos(a) * d}px;--dy:${Math.sin(a) * d - 14}px;--r:${(i % 2 ? 1 : -1) * 40}deg">${e}</i>`; }).join('');
+  el.appendChild(b); setTimeout(() => b.remove(), 900);
+}
+let confettiRaf = 0;
+function confetti(n = 140) {
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const cv = $('#confetti'), dpr = window.devicePixelRatio || 1;
+  cv.width = innerWidth * dpr; cv.height = innerHeight * dpr;
+  const ctx = cv.getContext('2d'); ctx.scale(dpr, dpr);
+  const cols = ['#F08CA3', '#FFB3BF', '#E4DEF7', '#6B5B95', '#1E2B4D', '#FFD9A8', '#fff'];
+  const ps = Array.from({ length: n }, () => ({ x: innerWidth / 2 + (Math.random() - .5) * 120, y: innerHeight * .35, vx: (Math.random() - .5) * 13, vy: -Math.random() * 13 - 3, s: 5 + Math.random() * 7, r: Math.random() * 6, vr: (Math.random() - .5) * .4, c: cols[(Math.random() * cols.length) | 0], h: Math.random() > .6 }));
+  cancelAnimationFrame(confettiRaf); let t0 = performance.now();
+  const step = t => {
+    const dt = Math.min(2, (t - t0) / 16.7); t0 = t; ctx.clearRect(0, 0, innerWidth, innerHeight); let alive = 0;
+    ps.forEach(p => { p.vy += .32 * dt; p.vx *= .995; p.x += p.vx * dt; p.y += p.vy * dt; p.r += p.vr * dt; if (p.y < innerHeight + 20) alive++; ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.fillStyle = p.c; if (p.h) { ctx.font = `${p.s * 2}px sans-serif`; ctx.fillText('♥', 0, 0); } else ctx.fillRect(-p.s / 2, -p.s / 3, p.s, p.s * .6); ctx.restore(); });
+    if (alive) confettiRaf = requestAnimationFrame(step); else ctx.clearRect(0, 0, innerWidth, innerHeight);
+  };
+  confettiRaf = requestAnimationFrame(step);
+}
+
+/* =====================================================================
+   HOME
+   ===================================================================== */
+function allCats() { return [...BASE_CATS.slice(0, -1), ...[], 'Other', ...S.settings.customCats.filter(c => !BASE_CATS.includes(c))]; }
+function formCats() { return [...BASE_CATS.filter(c => c !== 'Other'), 'Other', ...S.settings.customCats.filter(c => !BASE_CATS.includes(c))]; }
+function homeList() {
+  let l = activeProducts();
+  if (UI.cat === 'Holy grail') l = l.filter(p => p.fav); else if (UI.cat !== 'All') l = l.filter(p => p.cat === UI.cat);
+  const f = UI.filters;
+  if (f.fav) l = l.filter(p => p.fav);
+  if (f.expiring) l = l.filter(p => { const e = expiryInfo(p); return e && e.soon; });
+  if (f.estimated) l = l.filter(isEstimated);
+  if (f.project) l = l.filter(p => S.projectIds.includes(p.id));
+  const s = UI.sort;
+  return [...l].sort((a, b) => s === 'name' ? a.name.localeCompare(b.name) : s === 'uses' ? loggedUses(b) - loggedUses(a) : s === 'expiry' ? (expiryInfo(a)?.left ?? 1e9) - (expiryInfo(b)?.left ?? 1e9) : b.added - a.added);
+}
+function tileHTML(p, cols) {
+  const e = expiryInfo(p), sel = UI.selMode && UI.sel.has(p.id);
+  return `<div><button class="tile" data-act="${UI.selMode ? 'toggleSel' : 'openProduct'}" data-id="${p.id}" aria-label="${esc(p.name)}${p.brand ? ', ' + esc(p.brand) : ''}">${pimg(p)}
+    ${p.fav ? `<span class="bdg h">${ic('heart', 'f')}</span>` : ''}${S.projectIds.includes(p.id) ? `<span class="bdg p">${ic('palette')}</span>` : ''}${e && e.soon ? `<span class="bdg e ${e.left < 0 ? 'bad' : ''}" title="${e.left < 0 ? 'Expired' : 'Expiring soon'}"></span>` : ''}
+    ${sel ? `<span class="chk"><span>${ic('check')}</span></span>` : ''}</button>${cols === 3 ? `<div class="tname one">${esc(p.name)}</div>` : ''}</div>`;
+}
+function basketSection() {
+  const items = S.basket.map(byId).filter(p => p && p.status === 'active');
+  const done = items.filter(p => usesToday(p) > 0).length;
+  const col = S.settings.basketCollapsed;
+  let body = '';
+  if (!col) {
+    if (!items.length) body = `<div class="card lav row" style="gap:12px"><div style="flex:none">${duck(64, { sparkle: false })}</div><div class="grow"><b>Your basket is empty</b><div class="sm muted">Pick your everyday items to log them with a double tap.</div></div></div>`;
+    else body = `<div class="basket" role="list">${items.map(p => { const n = usesToday(p); return `<div class="bcard ${n ? 'done' : ''}" role="listitem" tabindex="0" data-bid="${p.id}" aria-label="${esc(p.name)}, ${n} uses today. Double tap to log a use.">
+        <div class="ph">${pimg(p)}</div><div class="nm clamp">${esc(p.name)}</div><span class="ct">${n ? '×' + n + ' today' : 'not yet'}</span>
+        <button class="info" data-act="openProduct" data-id="${p.id}" aria-label="Open ${esc(p.name)}">${ic('chev')}</button></div>`; }).join('')}</div>
+      <div class="xs muted" style="margin-top:-4px">Double-tap a card to log a use ✨</div>
+      ${done === items.length ? `<div class="card lav row fade-in mt8" style="gap:10px"><div style="flex:none">${duck(56, { happy: true, sparkle: false })}</div><div><b>All done for today!</b><div class="sm muted">Every basket item has been used 💖</div></div></div>` : ''}`;
+  }
+  return `<section class="mt16" aria-label="Today basket"><div class="row between"><button class="row" data-act="toggleBasket" style="min-height:44px;gap:8px" aria-expanded="${!col}"><span class="lbl">Today ${items.length ? `· ${done}/${items.length}` : ''}</span><span style="transform:rotate(${col ? -90 : 0}deg);transition:.2s;display:grid">${ic('chevd')}</span></button><button class="pill" data-act="editBasket" style="min-height:36px">${ic('pencil')} Edit</button></div>${body}</section>`;
+}
+function viewHome() {
+  const list = homeList(), cols = S.settings.cols, all = activeProducts();
+  const cats = ['All', ...BASE_CATS.filter(c => c !== 'Other'), 'Holy grail', 'Other', ...S.settings.customCats.filter(c => !BASE_CATS.includes(c))];
+  const fActive = Object.values(UI.filters).some(Boolean);
+  const chips = cats.map(c => `<button class="chip ${UI.cat === c ? 'on' : ''}" data-act="setCat" data-v="${esc(c)}" aria-pressed="${UI.cat === c}"><span class="cc">${catEmoji(c)}</span>${esc(c)}</button>`).join('');
+  let body;
+  if (!all.length) body = emptyState('Your collection is empty', 'Add your first product with the + button and start panning!', `<div class="row mt16" style="justify-content:center"><button class="btn" data-act="addProduct">${ic('plus')} Add product</button><button class="btn soft" data-act="loadSample">Try demo</button></div>`);
+  else if (!list.length) body = emptyState('Nothing here yet', 'No products match this filter.', fActive || UI.cat !== 'All' ? `<button class="btn soft mt12" data-act="clearFilters">Clear filters</button>` : '');
+  else body = `<div class="grid cols${cols}" style="--cols:${cols}">${list.map(p => tileHTML(p, cols)).join('')}</div>`;
+  const selBar = UI.selMode ? `<div class="card lav row wrapf mt8" style="gap:8px"><b class="grow">${UI.sel.size} selected</b>
+    <button class="btn sm soft" data-act="bulk" data-v="basket">+ Basket</button><button class="btn sm soft" data-act="bulk" data-v="fav">♥</button><button class="btn sm soft" data-act="bulk" data-v="project">+ Project</button><button class="btn sm soft" data-act="bulk" data-v="archive">Archive</button><button class="btn sm danger" data-act="bulk" data-v="delete">Delete</button></div>` : '';
+  return `<div class="wrap"><div class="row between"><h1>My Collection</h1><div class="row" style="gap:8px">
+    <button class="rbtn" data-act="openWishlist" aria-label="Wishlist">${ic('folderHeart')}</button><button class="rbtn" data-act="openEmpties" aria-label="Empties and history">${ic('clock')}</button><button class="rbtn" data-act="openSearch" aria-label="Search">${ic('search')}</button></div></div>
+    ${basketSection()}
+    <div class="chips" role="group" aria-label="Categories">${chips}</div>
+    <div class="row between mt8"><span class="lbl">${list.length} ${list.length === 1 ? 'PRODUCT' : 'PRODUCTS'}</span><div class="row" style="gap:6px">
+      <button class="rbtn ${fActive ? 'on' : ''}" data-act="filterSheet" aria-label="Filter">${ic('filter')}</button><button class="rbtn ${UI.selMode ? 'on' : ''}" data-act="toggleSelMode" aria-label="Select multiple">${ic('select')}</button><button class="rbtn" data-act="sortSheet" aria-label="Sort">${ic('sort')}</button><button class="rbtn" data-act="cycleCols" aria-label="Grid size, currently ${cols} columns" style="position:relative">${ic('grid')}<b style="position:absolute;right:6px;bottom:4px;font-size:10px;color:var(--pink)">${cols}</b></button></div></div>
+    ${selBar}<div class="mt12">${body}</div></div>`;
+}
+/* =====================================================================
+   PAGES (overlays) + TABS
+   ===================================================================== */
+function pageHTML(pg) {
+  return ({ detail: detailPage, form: formPage, empties: emptiesPage, wishlist: wishlistPage, search: searchPage, recap: recapPage })[pg.t](pg);
+}
+const pageHdr = (title, right = '<span class="sp"></span>') => `<div class="hdr"><button class="rbtn" data-act="closePage" aria-label="Close">${ic('x')}</button><h2 class="one">${esc(title)}</h2>${right}</div>`;
+
+/* ---------------- PRODUCT DETAILS ---------------- */
+function detailPage(pg) {
+  const p = byId(pg.id);
+  if (!p) return `<div class="inner">${pageHdr('Product')}${emptyState('Product not found', 'It may have been deleted.')}</div>`;
+  const fin = p.status === 'finished', arch = p.status === 'archived';
+  const rem = usesRemaining(p), E = expectedUses(p), pct = pctLeft(p), e = expiryInfo(p), est = estFinish(p), inProj = S.projectIds.includes(p.id);
+  const hist = [...p.logs].sort((a, b) => b.ts - a.ts), showAll = UI.histMore[p.id];
+  const photos = [...p.photos].sort((a, b) => a.ts - b.ts);
+  const cpu = costPerUse(p);
+  return `<div class="inner ${fin ? '' : 'abp'}">
+  ${pageHdr('Product', `<button class="rbtn" data-act="editProduct" data-id="${p.id}" aria-label="Edit product">${ic('pencil')}</button>`)}
+  <div style="text-align:center"><div class="tile" style="width:168px;margin:0 auto;border-radius:30px;box-shadow:var(--shadow)">${pimg(p)}
+    <button class="bdg h" style="width:34px;height:34px;left:8px;top:8px;color:${p.fav ? 'var(--pink)' : 'var(--muted)'}" data-act="toggleFav" data-id="${p.id}" aria-pressed="${p.fav}" aria-label="Holy grail">${ic('heart', p.fav ? 'f' : '')}</button></div>
+    <h1 class="mt12 clamp" style="font-size:25px">${esc(p.name)}</h1>
+    ${p.brand ? `<div class="muted" style="font-weight:600;overflow-wrap:anywhere">${esc(p.brand)}</div>` : ''}
+    <div class="row wrapf mt8" style="justify-content:center;gap:6px">${p.shade ? `<span class="pill">${esc(p.shade)}</span>` : ''}${p.finish ? `<span class="pill">${esc(p.finish)}</span>` : ''}<span class="pill">${catEmoji(p.cat)} ${esc(p.cat)}</span>${p.gift ? `<span class="pill pk">${ic('gift')} Gift</span>` : ''}${isEstimated(p) ? '<span class="pill warn">Estimated</span>' : ''}${p.partly ? '<span class="pill">Partly tracked</span>' : ''}${arch ? '<span class="pill">Archived</span>' : ''}${fin ? '<span class="pill ok">Finished</span>' : ''}${e && e.soon ? `<span class="pill ${e.cls}">${e.left < 0 ? 'Expired' : 'Expiring soon'}</span>` : ''}</div></div>
+  ${fin ? `<div class="card lav mt16 row between wrapf"><div><b>Finished ${fmtDate(p.finishDate)}</b><div class="sm muted">${p.verdict ? 'Repurchase: ' + ({ yes: 'Yes 💖', maybe: 'Maybe 🤔', no: 'No 🙅' })[p.verdict] : 'No repurchase verdict yet'}${p.note ? ' — ' + esc(p.note) : ''}</div></div><div class="row"><button class="btn sm soft" data-act="verdict" data-id="${p.id}">Verdict</button><button class="btn sm" data-act="restore" data-id="${p.id}">Restore</button></div></div>` : ''}
+  <div class="two mt16">
+    <div class="card" id="usedCard"><div class="lbl">Used</div>
+      <div class="stepper"><button data-act="useMinus" data-id="${p.id}" aria-label="Remove latest use" ${!p.logs.length || fin ? 'disabled style="opacity:.4"' : ''}>${ic('minus')}</button><span class="stat" aria-live="polite">${p.logs.length}</span><button data-act="usePlus" data-id="${p.id}" aria-label="Log a use today" ${p.status !== 'active' ? 'disabled style="opacity:.4"' : ''}>${ic('plus')}</button></div>
+      <div style="text-align:center"><span class="pill" style="font-size:13px">${cpu == null ? '—' : cpuText(p) + '/use'}</span></div>
+      ${isEstimated(p) ? `<div class="xs muted" style="text-align:center;margin-top:6px">+ ~${p.estPast} past uses counted</div>` : ''}</div>
+    <div class="card"><div class="lbl">Remaining</div>
+      ${rem > 0 ? `<div class="stat" style="margin:8px 0 2px">${rem}</div><div class="xs muted">uses left · ${pct}% left</div>` : `<div style="margin:8px 0 2px;font-weight:800;font-size:19px">${totalUses(p) > E ? 'Bonus uses! 🎉' : 'Practically empty 🫧'}</div><button class="pill pk" data-act="raiseExpected" data-id="${p.id}" style="min-height:36px">Raise total +10</button>`}
+      <div class="bar mt8"><i style="width:${100 - pct}%"></i></div>
+      <input type="range" min="0" max="100" step="5" value="${pct}" id="pctSlider" data-in="pctPrev" aria-label="Percent left" style="margin-top:2px"><div class="row between"><b id="pctVal">${pct}%</b><button class="btn sm soft" data-act="setPct" data-id="${p.id}" style="min-height:44px;padding:0 18px">Set</button></div></div>
+  </div>
+  ${isEstimated(p) ? `<div class="card lav mt12 row between wrapf"><div class="sm"><b>Cost per use gets more accurate the more you log.</b></div><button class="btn sm soft" data-act="recalibrate" data-id="${p.id}">${ic('refresh')} Recalibrate</button></div>` : ''}
+  <div class="card mt12"><div class="kv"><span class="muted">Expected total</span><b>${E} uses</b></div>
+    <div class="kv"><span class="muted">${p.startDate && p.inUse ? 'Tracking since' : 'Start date'}</span><b>${fmtDate(p.startDate)} <button class="pill" style="min-height:32px;margin-left:4px" data-act="editStart" data-id="${p.id}">Edit</button></b></div>
+    ${fin ? `<div class="kv"><span class="muted">Finish date</span><b>${fmtDate(p.finishDate)}</b></div><div class="kv"><span class="muted">Lasted</span><b>${plural(daysLasted(p), 'day')}</b></div>`
+      : `<div class="kv"><span class="muted">Estimated finish</span><b>${est.state === 'ok' ? fmtDate(est.date) : est.state === 'done' ? 'Almost there!' : 'Log a few more uses to see an estimate'}</b></div>`}</div>
+  <details class="card mt12"><summary>Purchase ${ic('chevd')}</summary><div class="dd"><div class="kv"><span class="muted">Price</span><b>${p.price == null ? '—' : inr(p.price)}</b></div><div class="kv"><span class="muted">Where bought</span><b>${esc(p.where) || '—'}</b></div><div class="kv"><span class="muted">Date bought</span><b>${fmtDate(p.bought)}</b></div><div class="kv"><span class="muted">Gift</span><b>${p.gift ? '🎁 Gift' : 'No'}</b></div></div></details>
+  <details class="card mt12" open><summary>Expiry ${ic('chevd')}</summary><div class="dd">${e ? `<div class="row between"><b style="font-size:20px">${e.text}</b><span class="pill ${e.cls}">${ic('jar')} ${p.pao}M</span></div><div class="bar ${e.cls} mt8" role="progressbar" aria-valuenow="${Math.round(e.pctUsed)}" aria-valuemin="0" aria-valuemax="100"><i style="width:${e.pctUsed}%"></i></div>
+      <div class="kv mt8"><span class="muted">Opened</span><b>${p.openedApprox ? fmtMonthYear(p.opened) + ' (approx.)' : fmtDate(p.opened)}</b></div><div class="kv"><span class="muted">Expires</span><b>${fmtDate(e.exp)}</b></div>`
+      : `<div class="muted sm">Add the date opened and PAO (period after opening) in Edit to track expiry.</div>${p.pao ? `<div class="mt8"><span class="pill">${ic('jar')} ${p.pao}M</span></div>` : ''}`}</div></details>
+  <div class="row between mt24"><h3>Progress photos</h3><div class="row" style="gap:6px">${photos.length ? `<button class="btn sm soft" data-act="shareProgress" data-id="${p.id}">${ic('share')} Share</button>` : ''}<button class="btn sm" data-act="addPhoto" data-id="${p.id}">${ic('camera')} Add</button></div></div>
+  ${photos.length ? `<div class="photos mt12">${photos.map(ph => `<button class="ptile" data-act="viewPhoto" data-id="${p.id}" data-pid="${ph.id}" aria-label="Progress photo ${fmtDate(dayKey(ph.ts), true)}"><img src="${src(ph.img)}" alt="" loading="lazy"><span>${fmtDate(dayKey(ph.ts))} · ${plural(ph.uses, 'use')} · ${ph.pct}% left</span></button>`).join('')}</div>` : `<div class="muted sm mt8">Great for powders and palettes — snap a photo as the pan appears.</div>`}
+  <div class="row between mt24"><h3>Use history</h3><span class="muted sm">${plural(p.logs.length, 'log')} in app</span></div>
+  <div class="list mt12">${hist.length ? hist.slice(0, showAll ? 999 : 15).map(l => `<div class="prow" style="padding:6px 6px 6px 16px"><div class="grow"><b>${fmtDate(l.day)}</b> <span class="muted sm">${fmtTime(l.ts)}</span></div><button class="rbtn" style="box-shadow:none;background:var(--card2)" data-act="delLog" data-id="${p.id}" data-lid="${l.id}" aria-label="Delete this log">${ic('trash')}</button></div>`).join('') : '<div class="muted sm">No uses logged yet.</div>'}${hist.length > 15 && !showAll ? `<button class="btn soft block" data-act="histMore" data-id="${p.id}">Show all ${hist.length}</button>` : ''}${isEstimated(p) ? `<div class="muted sm">+ ~${p.estPast} estimated uses from before tracking</div>` : ''}</div>
+  ${p.status === 'active' ? `<button class="btn pink block mt24" data-act="finish" data-id="${p.id}" style="min-height:56px;font-size:16px">${ic('check')} Mark as finished</button>` : ''}
+  </div>
+  ${fin ? '' : `<div class="abar"><div>
+    <button data-act="toWishlist" data-id="${p.id}">${ic('folderHeart')}Wishlist</button><button data-act="duplicate" data-id="${p.id}">${ic('copy')}Duplicate</button>
+    <button class="${inProj ? 'on' : ''}" data-act="toProject" data-id="${p.id}" aria-pressed="${inProj}">${ic('palette')}${inProj ? 'In Project' : 'Add to Project'}</button><button class="${arch ? 'on' : ''}" data-act="archive" data-id="${p.id}">${ic('archive')}${arch ? 'Unarchive' : 'Archive'}</button></div></div>`}`;
+}
+
+/* ---------------- ADD / EDIT FORM ---------------- */
+function newForm(base = {}) {
+  const cat = base.cat || 'Face', sg = suggestExpected(cat);
+  return Object.assign({ id: null, mode: 'new', name: '', brand: '', cat, price: '', shade: '', finish: '', expected: String(sg.n), expTouched: false, where: '', bought: '', gift: false, opened: '', pao: '', pct: 50, pastUses: '', pastUnknown: true, fav: false,
+    imgId: null, imgData: null, origData: null, bgRemoved: false, busy: '', err: {}, dirty: false, newCat: false }, base);
+}
+function formFromProduct(p) {
+  return newForm({ id: p.id, mode: p.inUse ? 'used' : 'new', name: p.name, brand: p.brand, cat: p.cat, price: p.price == null ? '' : String(p.price), shade: p.shade, finish: p.finish, expected: String(p.expected), expTouched: true, where: p.where, bought: p.bought || '', gift: p.gift, opened: p.opened || '', openedApprox: p.openedApprox, openedOrig: p.opened || '', pao: p.pao ? String(p.pao) : '', fav: p.fav, imgId: p.img, bgRemoved: p.bgRemoved });
+}
+function formPage() {
+  const F = UI.form; if (!F) return '';
+  const edit = !!F.id, sg = suggestExpected(F.cat, F.id);
+  const er = n => F.err[n] ? `<div class="errm" role="alert">${esc(F.err[n])}</div>` : '';
+  const inp = (label, name, o = {}) => `<div class="field"><label class="lbl" for="f_${name}">${label}</label><input class="inp ${F.err[name] ? 'err' : ''}" id="f_${name}" data-f="${name}" value="${esc(F[name])}" ${o.a || ''} aria-invalid="${!!F.err[name]}">${er(name)}${o.hint ? `<div class="hint">${o.hint}</div>` : ''}</div>`;
+  const prev = F.imgData || src(F.imgId);
+  const used = F.mode === 'used';
+  const pl = F.pct >= 88 ? 'Full' : F.pct >= 63 ? '¾ left' : F.pct >= 38 ? '½ left' : F.pct >= 15 ? '¼ left' : 'Almost done';
+  const dupe = !edit && F.name.trim() && S.products.some(p => p.name.trim().toLowerCase() === F.name.trim().toLowerCase() && p.status !== 'archived');
+  return `<div class="inner">${pageHdr(edit ? 'Edit product' : 'Add product')}
+  <div class="field" style="margin-top:4px"><div class="photoBox">${F.busy === 'img' ? '<div class="spin" aria-label="Loading"></div>' : prev ? `<img src="${prev}" alt="Product preview">` : `<div>${ic('camera')}<div class="sm" style="font-weight:700">Add a photo</div></div>`}${F.busy === 'bg' ? '<div style="position:absolute;inset:0;background:rgba(255,255,255,.7);display:grid;place-items:center"><div style="text-align:center"><div class="spin" style="margin:auto"></div><div class="xs mt8">Removing background…<br>first time can take a minute</div></div></div>' : ''}</div>
+    <div class="row wrapf mt12" style="justify-content:center;gap:8px"><button class="btn sm soft" data-act="pickPhoto" data-v="cam">${ic('camera')} Camera</button><button class="btn sm soft" data-act="pickPhoto" data-v="gal">Gallery</button>
+    ${prev ? (F.bgRemoved ? (F.origData ? `<button class="btn sm ghost" data-act="useOriginal">Use original</button>` : '') : `<button class="btn sm pink" data-act="removeBg" ${F.busy ? 'disabled' : ''}>✨ Remove background</button>`) : ''}${prev ? `<button class="btn sm ghost" data-act="clearPhoto">Remove photo</button>` : ''}</div>
+    ${er('img')}</div>
+  ${edit ? '' : `<div class="field"><div class="seg" role="group" aria-label="Product state"><button data-act="setMode" data-v="new" class="${!used ? 'on' : ''}" aria-pressed="${!used}">New</button><button data-act="setMode" data-v="used" class="${used ? 'on' : ''}" aria-pressed="${used}">Already in use</button></div></div>`}
+  ${inp('Name *', 'name', { a: 'maxlength="120" autocomplete="off" placeholder="e.g. Rare Beauty Soft Pinch Blush"' })}${dupe ? '<div class="hint" style="color:var(--warn)">You already have a product with this name — saving is still fine ✨</div>' : ''}
+  ${inp('Brand (optional)', 'brand', { a: 'maxlength="80" autocomplete="off"' })}
+  <div class="field"><div class="lbl">Category</div><div class="row wrapf" style="gap:8px">${formCats().map(c => `<button class="tchip ${F.cat === c ? 'on' : ''}" data-act="setFormCat" data-v="${esc(c)}" aria-pressed="${F.cat === c}">${catEmoji(c)} ${esc(c)}</button>`).join('')}<button class="tchip" data-act="newCat">+ New</button></div>
+    ${F.newCat ? `<div class="row mt8"><input class="inp grow" id="newCatInp" maxlength="24" placeholder="Category name" aria-label="New category name"><button class="btn sm" data-act="saveCat">Add</button></div>` : ''}${er('cat')}</div>
+  <div class="two">${inp('Price (₹)', 'price', { a: 'inputmode="decimal" placeholder="optional"' })}${inp('Shade', 'shade', { a: 'maxlength="80"' })}</div>
+  <div class="field"><label class="lbl" for="f_finish">Finish</label><input class="inp" id="f_finish" data-f="finish" list="finishes" maxlength="40" value="${esc(F.finish)}" placeholder="matte, dewy, shimmer…"><datalist id="finishes">${FINISHES.map(f => `<option value="${f}">`).join('')}</datalist></div>
+  <div class="field"><label class="lbl" for="f_expected">Expected total uses *</label><input class="inp ${F.err.expected ? 'err' : ''}" id="f_expected" data-f="expected" inputmode="numeric" value="${esc(F.expected)}" aria-invalid="${!!F.err.expected}">${er('expected')}
+    <div class="hint">${sg.from ? `Suggested ${sg.n} — average of your ${plural(sg.from, 'finished ' + F.cat.toLowerCase() + ' product')}. ` : `A typical guess for ${esc(F.cat.toLowerCase())} is ${sg.n}. `}<button class="pill" data-act="useSuggested" data-n="${sg.n}">Use ${sg.n}</button></div></div>
+  <div class="tog mt12"><span><b>Holy grail</b> <span class="muted sm">♥ favourite</span></span><button class="sw ${F.fav ? 'on' : ''}" data-act="ftoggle" data-v="fav" role="switch" aria-checked="${F.fav}" aria-label="Holy grail"></button></div>
+  ${used && !edit ? `<div class="card lav mt16"><h3>Roughly where is it at?</h3><div class="sm muted">Rough is totally fine — you can recalibrate any time.</div>
+    <div class="field"><div class="row between"><span class="lbl">Approx. % left</span><b id="pctLbl">${pl} · ${F.pct}%</b></div><input type="range" min="5" max="100" step="5" value="${F.pct}" data-in="fpct" aria-label="Approximate percent left"><div class="row between xs muted"><span>Almost done</span><span>¼</span><span>½</span><span>¾</span><span>Full</span></div></div>
+    <div class="field"><label class="lbl" for="f_pastUses">Approx. past uses</label><div class="row"><input class="inp ${F.err.pastUses ? 'err' : ''}" id="f_pastUses" data-f="pastUses" inputmode="numeric" value="${esc(F.pastUses)}" placeholder="${F.pastUnknown ? 'estimated from % left' : 'e.g. 20'}" ${F.pastUnknown ? 'disabled' : ''}><button class="tchip ${F.pastUnknown ? 'on' : ''}" data-act="pastUnknown" aria-pressed="${F.pastUnknown}">I don’t know</button></div>${er('pastUses')}</div>
+    <div class="hint">Past uses are kept separate from uses you log here. Cost per use shows “~” while estimates are included.</div></div>` : ''}
+  <div class="two">${inp(used ? 'Approx. date opened' : 'Date opened', 'opened', { a: `type="${used && !edit ? 'month' : 'date'}"` })}
+    <div class="field"><label class="lbl" for="f_pao">PAO (months)</label><input class="inp ${F.err.pao ? 'err' : ''}" id="f_pao" data-f="pao" inputmode="numeric" value="${esc(F.pao)}" placeholder="e.g. 12">${er('pao')}</div></div>
+  <div class="row wrapf mt8" style="gap:6px"><span class="muted sm">${ic('jar')}</span>${PAOS.map(m => `<button class="tchip" style="min-height:44px" data-act="setPao" data-v="${m}">${m}M</button>`).join('')}</div>
+  <div class="hint" id="expPrev">${expPreview(F)}</div>
+  <div class="card lav mt16"><h3>Purchase details <span class="muted sm">(optional)</span></h3>
+    ${inp('Where bought', 'where', { a: 'maxlength="80"' })}${inp('Date bought', 'bought', { a: 'type="date"' })}
+    <div class="tog"><span><b>It was a gift</b> 🎁</span><button class="sw ${F.gift ? 'on' : ''}" data-act="ftoggle" data-v="gift" role="switch" aria-checked="${F.gift}" aria-label="Gift"></button></div></div>
+  <div class="row mt24" style="gap:10px">${edit ? `<button class="btn danger" data-act="deleteProduct" data-id="${F.id}" aria-label="Delete product">${ic('trash')}</button>` : ''}<button class="btn pink grow" data-act="saveProduct" style="min-height:54px" ${F.busy ? 'disabled' : ''}>${edit ? 'Save changes' : 'Add to collection'}</button></div>
+  <input type="file" id="fileCam" accept="image/*" capture="environment" hidden><input type="file" id="fileGal" accept="image/*" hidden></div>`;
+}
+function expPreview(F) {
+  const o = F.opened && (F.opened.length === 7 ? F.opened + '-01' : F.opened), m = parseInt(F.pao, 10);
+  if (!validDate(o) || !m) return F.opened || F.pao ? 'Add both date opened and PAO to see the expiry date.' : '';
+  return `Expires ${fmtDate(addMonths(o, m))}`;
+}
+
+/* ---------------- EMPTIES ---------------- */
+function emptiesPage() {
+  const E = UI.empties, arch = E.tab === 'archived';
+  let l = S.products.filter(p => p.status === (arch ? 'archived' : 'finished'));
+  if (E.cat !== 'All') l = l.filter(p => p.cat === E.cat);
+  if (!arch && E.verdict !== 'all') l = l.filter(p => (p.verdict || 'none') === E.verdict);
+  l.sort((a, b) => (b.finishDate || '').localeCompare(a.finishDate || ''));
+  const cats = ['All', ...new Set(S.products.filter(p => p.status !== 'active').map(p => p.cat))];
+  const VER = { yes: 'Yes 💖', maybe: 'Maybe 🤔', no: 'No 🙅', none: 'No verdict' };
+  return `<div class="inner">${pageHdr(arch ? 'Archived' : 'Empties')}
+  <div style="text-align:center">${duck(80, { happy: true })}<div class="lbl">${arch ? 'Put away for later' : 'Hall of fame · ' + finishedProducts().length + ' finished'}</div></div>
+  <div class="seg mt12"><button class="${!arch ? 'on' : ''}" data-act="empTab" data-v="finished">Finished</button><button class="${arch ? 'on' : ''}" data-act="empTab" data-v="archived">Archived</button></div>
+  <div class="row mt12" style="overflow-x:auto;gap:8px;padding:2px 0 6px">${cats.map(c => `<button class="tchip ${E.cat === c ? 'on' : ''}" data-act="empCat" data-v="${esc(c)}">${esc(c)}</button>`).join('')}</div>
+  ${arch ? '' : `<div class="row" style="overflow-x:auto;gap:8px;padding:2px 0 6px">${['all', 'yes', 'maybe', 'no', 'none'].map(v => `<button class="tchip ${E.verdict === v ? 'on' : ''}" data-act="empVer" data-v="${v}">${v === 'all' ? 'All verdicts' : VER[v]}</button>`).join('')}</div>`}
+  <div class="list mt12">${l.length ? l.map(p => `<div class="card" style="padding:12px"><button class="row" style="width:100%;text-align:left;gap:12px" data-act="openProduct" data-id="${p.id}"><div class="th tile" style="width:76px;border-radius:20px;flex:none">${pimg(p)}</div><div class="grow"><b class="clamp">${esc(p.name)}</b><div class="sm muted one">${esc(p.brand) || '&nbsp;'}</div>
+      <div class="row wrapf mt8" style="gap:5px"><span class="pill">${cpuText(p)}/use</span><span class="pill">${plural(loggedUses(p), 'use')}</span>${!arch ? `<span class="pill">${plural(daysLasted(p) || 0, 'day')}</span>` : ''}${p.partly ? '<span class="pill warn">Partly tracked</span>' : ''}${!arch ? `<span class="pill pk">${VER[p.verdict || 'none']}</span>` : ''}</div></div></button>
+      <div class="row mt8" style="justify-content:flex-end;gap:8px">${arch ? '' : `<button class="btn sm soft" data-act="verdict" data-id="${p.id}">Verdict</button>`}<button class="btn sm soft" data-act="restore" data-id="${p.id}">${ic('refresh')} Restore</button></div></div>`).join('')
+    : emptyState(arch ? 'Nothing archived' : 'No empties yet', arch ? 'Archived products rest here.' : 'Finish a product and it joins your hall of fame!')}</div></div>`;
+}
+
+/* ---------------- WISHLIST ---------------- */
+function wishlistPage() {
+  const now = Date.now();
+  return `<div class="inner">${pageHdr('Wishlist', `<button class="rbtn" data-act="addWish" aria-label="Add wishlist item">${ic('plus')}</button>`)}
+  <div class="card lav row" style="gap:12px"><div style="flex:none">${duck(56, { sparkle: false })}</div><div class="sm"><b>30-day cooling-off.</b> Wait a month — if you still want it, it’s yours 💖</div></div>
+  <div class="list mt16">${S.wishlist.length ? [...S.wishlist].sort((a, b) => a.added - b.added).map(w => {
+    const days = Math.floor((dnum(today()) - dnum(dayKey(w.added)))), left = Math.max(0, 30 - days), ready = left === 0;
+    return `<div class="card"><div class="row" style="gap:12px">${w.img ? `<div class="th tile" style="width:64px;flex:none"><img class="ph" src="${src(w.img)}" alt=""></div>` : ''}<div class="grow"><b class="clamp">${esc(w.name)}</b><div class="sm muted">${w.price != null ? inr(w.price) : 'No price'}${w.link ? ` · <a href="${esc(/^https?:\/\//i.test(w.link) ? w.link : '#')}" target="_blank" rel="noopener noreferrer" style="color:var(--ink2)">link</a>` : ''}</div></div><span class="pill ${ready ? 'ok' : 'pk'}">${ready ? 'Ready ✓' : left + ' days left'}</span></div>
+      <div class="bar mt8"><i style="width:${Math.min(100, days / 30 * 100)}%"></i></div>
+      <div class="row mt12" style="gap:8px"><button class="btn sm grow ${ready ? '' : 'soft'}" data-act="wishBought" data-id="${w.id}" ${ready ? '' : 'disabled'} aria-disabled="${!ready}">${ready ? 'Mark as bought' : 'Bought (locked)'}</button><button class="btn sm danger" data-act="wishRemove" data-id="${w.id}" aria-label="Remove ${esc(w.name)}">${ic('trash')}</button></div></div>`;
+  }).join('') : emptyState('Wishlist is empty', 'Add things you’re tempted by — then let the 30 days decide.', `<button class="btn mt12" data-act="addWish">${ic('plus')} Add item</button>`)}</div></div>`;
+}
+
+/* ---------------- SEARCH ---------------- */
+function searchHits() {
+  const q = UI.searchQ.trim().toLowerCase();
+  const l = S.products.filter(p => p.status !== 'archived' && (!q || [p.name, p.brand, p.shade, p.cat, p.finish, p.where].some(x => (x || '').toLowerCase().includes(q))));
+  return l.sort((a, b) => a.name.localeCompare(b.name));
+}
+function searchRows() {
+  const l = searchHits();
+  return l.length ? l.map(p => `<button class="prow" data-act="openProduct" data-id="${p.id}"><div class="th">${pimg(p)}</div><div class="grow"><b class="clamp">${esc(p.name)}</b><div class="sm muted one">${esc([p.brand, p.shade].filter(Boolean).join(' · ')) || esc(p.cat)}</div></div>${p.status === 'finished' ? '<span class="pill ok">Finished</span>' : ''}</button>`).join('') : emptyState('No matches', 'Try another word.');
+}
+function searchPage() {
+  return `<div class="inner">${pageHdr('Search')}<input class="inp" id="searchInp" type="search" placeholder="Search name, brand, shade…" value="${esc(UI.searchQ)}" data-in="search" aria-label="Search products" autocomplete="off"><div class="list mt16" id="searchRes">${searchRows()}</div></div>`;
+}
+
+/* ---------------- MONTHLY RECAP ---------------- */
+function monthStats(mk = monthKey(today())) {
+  const prods = S.products.filter(p => p.status !== 'archived');
+  const used = prods.filter(p => p.status === 'active').filter(p => p.logs.some(l => monthKey(l.day) === mk));
+  const fin = finishedProducts().filter(p => p.finishDate && monthKey(p.finishDate) === mk);
+  let most = null, mc = 0; prods.forEach(p => { const c = p.logs.filter(l => monthKey(l.day) === mk).length; if (c > mc) { mc = c; most = p; } });
+  const days = [...new Set(S.products.flatMap(p => p.logs.filter(l => monthKey(l.day) === mk).map(l => l.day)))].sort();
+  let best = days.length ? 1 : 0, run = 1; for (let i = 1; i < days.length; i++) { run = diffDays(days[i], days[i - 1]) === 1 ? run + 1 : 1; best = Math.max(best, run); }
+  const label = new Date(mk + '-01T00:00:00Z').toLocaleDateString('en-IN', { timeZone: 'UTC', month: 'long', year: 'numeric' });
+  return { mk, label, used: used.length, total: activeProducts().length, fin, most, mc, best };
+}
+function recapPage() {
+  const m = monthStats();
+  return `<div class="inner">${pageHdr('Monthly recap')}<div style="text-align:center">${duck(110, { happy: true })}<h1>${esc(m.label)}</h1><div class="muted">${m.used} of ${m.total} products used</div></div>
+  <div class="three mt16"><div class="sbox"><b>${m.fin.length}</b><span class="lbl">Finished</span></div><div class="sbox"><b>${m.best}</b><span class="lbl">Best streak</span></div><div class="sbox"><b>${m.used}</b><span class="lbl">Used</span></div></div>
+  <div class="card mt16"><div class="lbl">Most-used product</div>${m.most ? `<button class="row mt8" style="gap:12px;text-align:left;width:100%" data-act="openProduct" data-id="${m.most.id}"><div class="th tile" style="width:64px;flex:none">${pimg(m.most)}</div><div><b class="clamp">${esc(m.most.name)}</b><div class="sm muted">${plural(m.mc, 'use')} this month</div></div></button>` : '<div class="muted mt8">Log some uses to see your favourite!</div>'}</div>
+  <div class="card mt12"><div class="lbl">Finished this month</div>${m.fin.length ? `<div class="list mt8">${m.fin.map(p => `<div class="row"><div class="th tile" style="width:44px;flex:none;border-radius:14px">${pimg(p)}</div><b class="grow clamp">${esc(p.name)}</b></div>`).join('')}</div>` : '<div class="muted mt8">No empties yet this month — you’ve got this!</div>'}</div>
+  <button class="btn pink block mt16" data-act="shareRecap">${ic('share')} Share recap image</button></div>`;
+}
+
+/* =====================================================================
+   PROJECT TAB
+   ===================================================================== */
+function segBar(done, total) {
+  if (total > 24) return `<div class="bar"><i style="width:${clamp(done / total * 100, 0, 100)}%"></i></div>`;
+  return `<div class="segs" role="img" aria-label="${done} of ${total}">${Array.from({ length: total }, (_, i) => `<i class="${i < done ? 'on' : ''}"></i>`).join('')}</div>`;
+}
+function viewProject() {
+  const st = streaks(), nb = noBuy(), earned = new Set(earnedBadges().map(b => b.id)), t = today();
+  const proj = S.projectIds.map(byId).filter(p => p && p.status === 'active');
+  const wl = S.wishlist.length, ready = S.wishlist.filter(w => Math.floor(dnum(t) - dnum(dayKey(w.added))) >= 30).length;
+  return `<div class="wrap"><h1>Project</h1><div class="muted">Little wins, one empty at a time ✨</div>
+  <div class="row mt16" style="gap:10px"><button class="card grow" style="text-align:left" data-act="openEmpties"><div class="lbl">Hall of fame</div><div class="stat mt8">${finishedProducts().length}</div><div class="sm muted">empties</div></button><button class="card grow" style="text-align:left" data-act="openWishlist"><div class="lbl">Wishlist</div><div class="stat mt8">${wl}</div><div class="sm muted">${ready ? ready + ' ready to buy' : 'cooling off'}</div></button></div>
+  <div class="row between mt24"><h2>Challenges</h2><button class="btn sm" data-act="newChallenge">${ic('plus')} New</button></div>
+  <div class="list mt12">${S.challenges.length ? [...S.challenges].sort((a, b) => a.end.localeCompare(b.end)).map(c => { const d = challengeProgress(c), done = d >= c.target, over = c.end < t && !done; return `<div class="card"><div class="row between" style="gap:8px"><b class="clamp">${esc(c.title)}</b><button class="rbtn" style="box-shadow:none;background:var(--card2)" data-act="delChallenge" data-id="${c.id}" aria-label="Delete challenge">${ic('trash')}</button></div><div class="sm muted">${fmtDate(c.start, true)} → ${fmtDate(c.end)} · ${done ? 'Completed 🎉' : over ? 'Ended' : plural(Math.max(0, diffDays(c.end, t)), 'day') + ' left'}</div><div class="mt12">${segBar(Math.min(d, c.target), c.target)}</div><div class="row between mt8"><span class="lbl">${Math.min(d, c.target)} / ${c.target} finished</span>${done ? '<span class="pill ok">Done</span>' : ''}</div></div>`; }).join('') : `<div class="card lav sm">Create a challenge like “Use up 10 products in 3 months”. Finishing a product counts automatically.</div>`}</div>
+  <h2 class="mt24">Streaks & badges</h2>
+  <div class="two mt12"><div class="card"><div class="lbl">Current streak</div><div class="stat mt8">${st.cur}<span class="sm muted"> days</span></div></div><div class="card"><div class="lbl">Best streak</div><div class="stat mt8">${st.best}<span class="sm muted"> days</span></div></div></div>
+  <div class="grid mt12" style="--cols:3">${BADGES.map(b => `<div class="badge ${earned.has(b.id) ? '' : 'lock'}"><div class="em">${b.em}</div><b>${b.name}</b></div>`).join('')}</div>
+  <h2 class="mt24">No-buy tracker</h2>
+  <div class="card mt12"><div class="row between"><div><div class="stat">${nb.days}</div><div class="sm muted">days since last purchase</div></div><div style="text-align:right"><div class="stat" style="font-size:24px">${nb.best}</div><div class="sm muted">longest streak</div></div></div><button class="btn soft block mt12" data-act="resetNoBuy">${ic('bag')} I bought something</button></div>
+  <div class="row between mt24"><h2>My project pan</h2></div>
+  <div class="list mt12">${proj.length ? proj.map(p => `<button class="prow" data-act="openProduct" data-id="${p.id}"><div class="th">${pimg(p)}</div><div class="grow"><b class="clamp">${esc(p.name)}</b><div class="bar mt8"><i style="width:${100 - pctLeft(p)}%"></i></div><div class="xs muted mt8">${pctLeft(p)}% left</div></div></button>`).join('') : `<div class="card lav sm">Open a product and tap “Add to Project” to pan it with purpose 🎨</div>`}</div></div>`;
+}
+
+/* =====================================================================
+   STATISTIC TAB
+   ===================================================================== */
+function rangeCut() { const r = UI.stat.range; return r === 'all' ? '0000-00-00' : addMonths(today(), -({ '3m': 3, '6m': 6, '1y': 12 })[r]); }
+function statProducts() {
+  const cut = rangeCut(), s = UI.stat;
+  let l = S.products.filter(p => p.status !== 'archived' && (cut === '0000-00-00' || dayKey(p.added) >= cut || p.logs.some(x => x.day >= cut) || (p.finishDate && p.finishDate >= cut)));
+  if (s.cat !== 'All') l = l.filter(p => p.cat === s.cat);
+  l = l.filter(p => s.status === 'finished' ? p.status === 'finished' : p.status === 'active');
+  return l.sort((a, b) => s.sort === 'name' ? a.name.localeCompare(b.name) : s.sort === 'uses' ? loggedUses(b) - loggedUses(a) : b.added - a.added);
+}
+function viewStats() {
+  const s = UI.stat, m = monthStats(), cut = rangeCut();
+  const inRange = S.products.filter(p => p.status !== 'archived' && (cut === '0000-00-00' || dayKey(p.added) >= cut || p.logs.some(x => x.day >= cut) || (p.finishDate && p.finishDate >= cut)));
+  const total = inRange.length, fin = inRange.filter(p => p.status === 'finished').length, list = statProducts();
+  const cats = ['All', ...new Set(S.products.map(p => p.cat))];
+  const tabs = [['3m', '3 Months'], ['6m', '6 Months'], ['1y', '1 Year'], ['all', 'All Time']];
+  return `<div class="wrap"><h1>Statistic</h1>
+  <div class="row mt12" style="overflow-x:auto;gap:8px;padding:2px 0 6px" role="tablist">${tabs.map(([k, n]) => `<button class="tchip ${s.range === k ? 'on' : ''}" role="tab" aria-selected="${s.range === k}" data-act="statRange" data-v="${k}">${n}</button>`).join('')}</div>
+  <button class="banner mt12" data-act="openRecap" aria-label="Open monthly recap"><div class="grow"><div class="lbl" style="color:#7a2d4a">Monthly report</div><div style="font-size:24px;font-weight:800;line-height:1.1;margin:4px 0">${esc(m.label)}</div><div style="font-weight:700">${m.used} of ${m.total} products used</div><div class="xs mt8" style="font-weight:700">See your recap →</div></div>
+    <div class="ft">${m.most ? pimg(m.most) : duck(70, { sparkle: false })}</div></button>
+  <div class="lbl mt24">At a glance</div>
+  <div class="two mt8"><div class="card"><div class="row between"><span class="lbl">Products</span><button class="rbtn" style="width:44px;height:44px;box-shadow:none;background:var(--card2)" data-act="shareStat" data-v="total" aria-label="Share total products">${ic('share')}</button></div><div class="stat">${total}</div></div>
+    <div class="card"><div class="row between"><span class="lbl">Finished</span><button class="rbtn" style="width:44px;height:44px;box-shadow:none;background:var(--card2)" data-act="shareStat" data-v="fin" aria-label="Share finished products">${ic('share')}</button></div><div class="stat">${fin}</div></div></div>
+  <div class="row mt24" style="gap:8px"><div class="seg grow"><button class="${s.status === 'active' ? 'on' : ''}" data-act="statStatus" data-v="active">Active</button><button class="${s.status === 'finished' ? 'on' : ''}" data-act="statStatus" data-v="finished">Finished</button></div>
+    <button class="rbtn" data-act="statSort" aria-label="Sort list">${ic('sort')}</button></div>
+  <div class="row mt8" style="overflow-x:auto;gap:8px;padding:2px 0 6px">${cats.map(c => `<button class="tchip ${s.cat === c ? 'on' : ''}" data-act="statCat" data-v="${esc(c)}">${esc(c)}</button>`).join('')}</div>
+  <div class="xs muted">Sorted by ${({ name: 'name', uses: 'uses logged', added: 'date added' })[s.sort]}</div>
+  <div class="list mt12">${list.length ? list.map(p => `<button class="prow" data-act="openProduct" data-id="${p.id}"><div class="th">${pimg(p)}</div><div class="grow"><b class="clamp">${esc(p.name)}</b>
+    <div class="row wrapf" style="gap:5px;margin-top:6px"><span class="pill">${plural(loggedUses(p), 'use')}</span><span class="pill">${cpuText(p)}/use</span><span class="pill">${p.status === 'finished' ? 'Done' : usesRemaining(p) + ' left'}</span>${p.status === 'active' ? `<span class="pill">Est. ${estText(p)}</span>` : ''}</div></div></button>`).join('')
+    : emptyState('Nothing to show', 'Add or log products and your stats will bloom here.')}</div></div>`;
+}
+
+/* =====================================================================
+   PROFILE TAB
+   ===================================================================== */
+function viewProfile() {
+  const hasSample = S.products.some(p => p.sample) || S.wishlist.some(w => w.sample) || S.challenges.some(c => c.sample);
+  return `<div class="wrap"><div style="text-align:center">${duck(150, { wave: true })}<h1 class="mt8">${esc(APP_NAME)}</h1><div class="muted">Use it up. Love it more. 💖</div></div>
+  <div class="two mt16"><div class="card" style="text-align:center"><div class="stat">${S.products.filter(p => p.status !== 'archived').length}</div><div class="lbl mt8">Products</div></div><div class="card" style="text-align:center"><div class="stat">${finishedProducts().length}</div><div class="lbl mt8">Finished</div></div></div>
+  <div class="card mt12"><div class="tog"><span class="row">${ic(S.settings.dark ? 'moon' : 'sun')}<b>Dark mode</b></span><button class="sw ${S.settings.dark ? 'on' : ''}" data-act="toggleDark" role="switch" aria-checked="${!!S.settings.dark}" aria-label="Dark mode"></button></div></div>
+  <div id="storeWarn"></div>
+  <h2 class="mt24">Backup</h2><div class="card mt12"><div class="sm muted">Your data lives only on this device. Export a backup now and then!</div>
+    <div class="row wrapf mt12" style="gap:8px"><button class="btn sm" data-act="exportJson">${ic('down')} Export JSON</button><button class="btn sm soft" data-act="exportCsv" data-v="products">${ic('down')} Products CSV</button><button class="btn sm soft" data-act="exportCsv" data-v="logs">${ic('down')} Use logs CSV</button></div>
+    <div class="mt12"><button class="btn sm ghost" data-act="importPick">${ic('up')} Import JSON</button></div><input type="file" id="importFile" accept="application/json,.json" hidden></div>
+  <h2 class="mt24">Demo data</h2><div class="card mt12"><div class="sm muted">Explore with sample products, then clear them in one tap — your own data stays.</div><div class="row mt12" style="gap:8px"><button class="btn sm soft" data-act="loadSample">Load sample data</button>${hasSample ? `<button class="btn sm danger" data-act="clearSample">Clear sample data</button>` : ''}</div></div>
+  <div class="center muted xs mt24" style="text-align:center">${esc(APP_NAME)} · made with 🎀 · works offline</div></div>`;
+}
+/* =====================================================================
+   ACTIONS: logging, finishing, forms, photos
+   ===================================================================== */
+let lastLogs = [];            // stack for Undo
+let shareCtx = null;
+
+function gcImages() {
+  const used = new Set();
+  S.products.forEach(p => { if (p.img) used.add(p.img); p.photos.forEach(x => used.add(x.img)); });
+  S.wishlist.forEach(w => { if (w.img) used.add(w.img); });
+  if (UI.form && UI.form.imgId) used.add(UI.form.imgId);
+  Object.keys(IMG).forEach(id => { if (!used.has(id)) { delete IMG[id]; Store.del('img', id); } });
+}
+async function putImage(data) { const id = uid(); IMG[id] = data; await Store.set('img', id, data); return id; }
+
+function checkBadges() {
+  const fresh = earnedBadges().filter(b => !S.badgesSeen.includes(b.id));
+  if (!fresh.length) return '';
+  fresh.forEach(b => S.badgesSeen.push(b.id)); confetti(100); save();
+  return fresh.map(b => `${b.em} ${b.name}`).join(', ');
+}
+const seedBadges = () => { S.badgesSeen = earnedBadges().map(b => b.id); };
+
+/* ---------- logging a use ---------- */
+function logUse(id) {
+  const p = byId(id); if (!p || p.status !== 'active') return false;
+  const l = { id: uid(), ts: Date.now(), day: today() };
+  p.logs.push(l); p.logs.sort((a, b) => a.ts - b.ts);
+  if (!p.startDate) { p.startDate = l.day; p.startAuto = true; }
+  lastLogs.push({ pid: id, lid: l.id }); if (lastLogs.length > 40) lastLogs.shift();
+  save(); haptic(); render();
+  burstAt($(`.bcard[data-bid="${id}"]`) || $('#usedCard'));
+  const nb = checkBadges();
+  toast('Logged ✨' + (nb ? ' · New badge ' + nb + '!' : ''), true);
+  return true;
+}
+function removeLog(p, lid) {
+  const i = p.logs.findIndex(l => l.id === lid); if (i < 0) return false;
+  p.logs.splice(i, 1);
+  if (i < p.baseLogs) p.baseLogs = Math.max(0, p.baseLogs - 1);
+  p.baseLogs = Math.min(p.baseLogs, p.logs.length);
+  if (!p.logs.length && p.startAuto) { p.startDate = null; p.startAuto = false; }
+  return true;
+}
+function undoLast() {
+  while (lastLogs.length) {
+    const { pid, lid } = lastLogs.pop(); const p = byId(pid);
+    if (p && removeLog(p, lid)) { save(); render(); toast('Undone'); return; }
+  }
+  toast('Nothing to undo');
+}
+
+/** Set % left (recalibrate). Keeps estimated past uses consistent with the new % left. */
+function recalibrate(p, pct, pastUses) {
+  p.pctBase = clamp(Math.round(pct), 0, 100); p.baseLogs = p.logs.length;
+  const usedTotal = Math.round(expectedUses(p) * (1 - p.pctBase / 100));
+  p.estPast = pastUses != null ? Math.max(0, Math.round(pastUses)) : Math.max(0, usedTotal - p.logs.length);
+  if (p.estPast > 0) p.partly = true;
+}
+
+function finishProduct(id) {
+  const p = byId(id); if (!p || p.status !== 'active') return;
+  p.status = 'finished'; p.finishDate = today(); p.pctBase = 0; p.baseLogs = p.logs.length;
+  if (!p.startDate) p.startDate = p.finishDate;
+  S.basket = S.basket.filter(x => x !== id); save(); haptic(30); checkBadges(); render();
+  openCeleb(id);
+}
+function restoreProduct(id) {
+  const p = byId(id); if (!p) return;
+  p.status = 'active'; p.finishDate = null;
+  // put back a sensible amount remaining so it isn't instantly "empty"
+  p.pctBase = Math.max(10, 100 - Math.round(totalUses(p) / expectedUses(p) * 100)); p.baseLogs = p.logs.length;
+  save(); render(); toast('Restored to your collection ✨');
+}
+
+/* ---------- celebration + onboarding overlay ---------- */
+function openCeleb(id) { UI.celeb = { t: 'fin', id }; renderCeleb(); setTimeout(() => confetti(180), 250); }
+function closeCeleb() { UI.celeb = null; renderCeleb(); }
+function renderCeleb() {
+  const c = UI.celeb, root = $('#celeb');
+  if (!c) { root.innerHTML = ''; return; }
+  if (c.t === 'onb') { root.innerHTML = onbHTML(c.step); return; }
+  const p = byId(c.id); if (!p) { root.innerHTML = ''; return; }
+  const fin = finishedProducts().length;
+  const done = S.challenges.find(ch => p.finishDate >= ch.start && p.finishDate <= ch.end && challengeProgress(ch) === ch.target);
+  const ch = done || currentChallenge();
+  let barHTML;
+  if (ch) { const d = Math.min(challengeProgress(ch), ch.target), left = ch.target - d; barHTML = `<div class="sm" style="font-weight:700">${done ? '🎉 Challenge complete: ' + esc(ch.title) : `${plural(left, 'more')} to ${esc(ch.title)} · ${d}/${ch.target}`}</div><div class="mt8">${segBar(d, ch.target)}</div>`; }
+  else { const nx = MILESTONES.find(m => m > fin) || fin + 25; barHTML = `<div class="sm" style="font-weight:700">${nx - fin} more to ${nx} empties · ${fin}/${nx}</div><div class="mt8">${segBar(Math.min(fin, nx), Math.min(nx, 24) === nx ? nx : 24)}</div>`; if (nx > 24) barHTML = `<div class="sm" style="font-weight:700">${nx - fin} more to ${nx} empties · ${fin}/${nx}</div><div class="mt8"><div class="bar"><i style="width:${fin / nx * 100}%"></i></div></div>`; }
+  root.innerHTML = `<div class="celeb" role="dialog" aria-modal="true" aria-label="Used it up"><div class="inner fade-in">${duck(130, { happy: true })}<h1 style="font-size:36px" class="mt8">Used it up!</h1><div style="font-weight:700;color:var(--ink2)">Every last bit. ✨</div>
+    <div class="pcheck"><div class="pi">${pimg(p)}</div><div class="ck">${ic('check')}</div></div>
+    ${p.brand ? `<div class="lbl">${esc(p.brand)}</div>` : ''}<h2 class="clamp mt8">${esc(p.name)}</h2>
+    <div class="three mt16"><div class="sbox"><b>${daysLasted(p)}</b><span class="lbl">Days</span></div><div class="sbox"><b>${isEstimated(p) ? '~' : ''}${totalUses(p)}</b><span class="lbl">Uses</span></div><div class="sbox"><b>${fin}</b><span class="lbl">Finished</span></div></div>
+    <div class="card mt16" style="text-align:left">${barHTML}</div>
+    <div class="row mt24" style="gap:10px"><button class="btn soft grow" data-act="shareFinished" data-id="${p.id}">${ic('share')} Share this</button><button class="btn grow" data-act="celebDone" data-id="${p.id}">Done</button></div></div></div>`;
+}
+const ONB = [
+  ['Welcome to ' + APP_NAME + '!', 'Track your makeup, log every use, and see the real value you get from each product.'],
+  ['Double-tap to log', 'Put your everyday items in the Today basket. Double-tap a card to log a use — single taps never log by accident.'],
+  ['Use it up, celebrate!', 'Finish products, join challenges, grow your streaks and fill your hall of fame. All data stays on your device.'],
+];
+function onbHTML(step) {
+  const [t, d] = ONB[step], last = step === ONB.length - 1;
+  return `<div class="celeb" role="dialog" aria-modal="true" aria-label="Welcome"><div class="inner fade-in" style="min-height:90vh;display:flex;flex-direction:column;justify-content:center">
+    <div>${duck(190, { wave: true })}</div><h1 class="mt16">${esc(t)}</h1><p class="muted" style="font-size:16px">${esc(d)}</p>
+    <div class="row mt16" style="justify-content:center;gap:6px">${ONB.map((_, i) => `<span style="width:${i === step ? 24 : 8}px;height:8px;border-radius:4px;background:${i === step ? 'var(--pink)' : 'var(--chip)'};transition:.3s"></span>`).join('')}</div>
+    <div class="mt24">${last ? `<button class="btn pink block" data-act="onbDone" data-v="fresh">Start fresh</button><button class="btn soft block mt8" data-act="onbDone" data-v="demo">Explore with demo data</button>` : `<button class="btn block" data-act="onbNext">Next</button><button class="btn ghost block mt8" data-act="onbDone" data-v="fresh">Skip</button>`}</div></div></div>`;
+}
+
+/* ---------- image helpers ---------- */
+async function compressImage(file, max = 720, alpha = false) {
+  let bmp;
+  try { bmp = await createImageBitmap(file); } catch (e) {
+    bmp = await new Promise((res, rej) => { const u = URL.createObjectURL(file); const i = new Image(); i.onload = () => { URL.revokeObjectURL(u); res(i); }; i.onerror = () => rej(new Error('img')); i.src = u; });
+  }
+  const w = bmp.width || bmp.naturalWidth, h = bmp.height || bmp.naturalHeight;
+  if (!w || !h) throw new Error('empty image');
+  const s = Math.min(1, max / Math.max(w, h)), cv = document.createElement('canvas');
+  cv.width = Math.max(1, Math.round(w * s)); cv.height = Math.max(1, Math.round(h * s));
+  const ctx = cv.getContext('2d');
+  if (!alpha) { ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, cv.width, cv.height); }
+  ctx.drawImage(bmp, 0, 0, cv.width, cv.height); if (bmp.close) bmp.close();
+  if (alpha) { const d = cv.toDataURL('image/webp', .85); return d.startsWith('data:image/webp') ? d : cv.toDataURL('image/png'); }
+  return cv.toDataURL('image/jpeg', .82);
+}
+const withTimeout = (pr, ms) => Promise.race([pr, new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), ms))]);
+
+async function handleFormFile(file) {
+  const F = UI.form; if (!file || !F) return;
+  if (!/^image\//.test(file.type)) { F.err.img = 'Please choose an image file.'; render(); return; }
+  F.busy = 'img'; delete F.err.img; render();
+  try { const d = await compressImage(file, 720, false); if (UI.form !== F) return; F.imgData = d; F.origData = d; F.bgRemoved = false; F.dirty = true; }
+  catch (e) { F.err.img = 'Couldn’t read that photo. Please try another one.'; }
+  F.busy = ''; render();
+}
+async function removeBgAction() {
+  const F = UI.form; if (!F || F.busy) return;
+  const source = F.imgData || src(F.imgId); if (!source) return;
+  F.busy = 'bg'; render();
+  try {
+    const mod = await withTimeout(import('https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.5/+esm'), 30000);
+    const fn = mod.removeBackground || (mod.default && mod.default.removeBackground) || mod.default;
+    const blob = await (await fetch(source)).blob();
+    const out = await withTimeout(fn(blob, { output: { format: 'image/png' } }), 150000);
+    const d = await compressImage(out, 720, true);
+    if (UI.form !== F) return; F.origData = source; F.imgData = d; F.bgRemoved = true; F.dirty = true; toast('Background removed ✨');
+  } catch (e) { if (UI.form === F) toast('Couldn’t remove the background — keeping your original photo.'); }
+  if (UI.form === F) { F.busy = ''; render(); }
+}
+
+/* ---------- form validation + save ---------- */
+function validateForm(F) {
+  const e = {}, t = today();
+  const name = F.name.trim();
+  if (!name) e.name = 'Give your product a name 💕'; else if (name.length > 120) e.name = 'That name is a bit long (max 120 characters).';
+  if (F.price.trim() !== '') { const v = F.price.replace(/[₹,\s]/g, ''); if (!/^\d+(\.\d{1,2})?$/.test(v) || +v > 10000000) e.price = 'Enter a valid price, like 499 or 499.50.'; }
+  if (!/^\d+$/.test(F.expected.trim()) || +F.expected < 1 || +F.expected > 5000) e.expected = 'Enter a whole number between 1 and 5000.';
+  if (F.pao.trim() !== '' && (!/^\d+$/.test(F.pao.trim()) || +F.pao < 1 || +F.pao > 120)) e.pao = 'PAO should be 1–120 months.';
+  if (F.opened) { const o = F.opened.length === 7 ? F.opened + '-01' : F.opened; if (!validDate(o)) e.opened = 'Enter a valid date.'; else if (o > t && !(F.opened.length === 7 && F.opened === t.slice(0, 7))) e.opened = 'Date opened can’t be in the future.'; }
+  if (F.bought) { if (!validDate(F.bought)) e.bought = 'Enter a valid date.'; else if (F.bought > t) e.bought = 'Date bought can’t be in the future.'; }
+  if (F.mode === 'used' && !F.id && !F.pastUnknown && F.pastUses.trim() !== '' && (!/^\d+$/.test(F.pastUses.trim()) || +F.pastUses > 100000)) e.pastUses = 'Enter a whole number, or tap “I don’t know”.';
+  return e;
+}
+async function saveProduct() {
+  const F = UI.form; if (!F || F.busy) return;
+  F.err = validateForm(F);
+  if (Object.keys(F.err).length) { render(); const el = $('.page .inp.err'); if (el) { el.scrollIntoView({ block: 'center' }); el.focus({ preventScroll: true }); } return; }
+  F.busy = 'save'; let imgId = F.imgId;
+  if (F.imgData) imgId = await putImage(F.imgData); else if (!F.imgId) imgId = null;
+  const price = F.price.trim() === '' ? null : parseFloat(F.price.replace(/[₹,\s]/g, ''));
+  const approx = F.opened.length === 7 || (!!F.openedApprox && F.opened === F.openedOrig);
+  const opened = F.opened ? (F.opened.length === 7 ? F.opened + '-01' : F.opened) : null;
+  const fields = { name: F.name.trim().replace(/\s+/g, ' '), brand: F.brand.trim(), cat: F.cat, price, shade: F.shade.trim(), finish: F.finish.trim(), expected: parseInt(F.expected, 10), where: F.where.trim(), bought: F.bought || null, gift: F.gift, opened, openedApprox: approx && !!opened, pao: F.pao.trim() ? parseInt(F.pao, 10) : null, fav: F.fav, img: imgId, bgRemoved: !!imgId && F.bgRemoved };
+  let p;
+  if (F.id && (p = byId(F.id))) { Object.assign(p, fields); toast('Saved ✨'); }
+  else {
+    p = Object.assign({ id: uid(), added: Date.now(), status: 'active', logs: [], photos: [], startDate: null, startAuto: false, finishDate: null, inUse: false, partly: false, pctBase: 100, baseLogs: 0, estPast: 0, verdict: null, note: '', sample: false }, fields);
+    if (F.mode === 'used') {
+      const pct = clamp(+F.pct || 50, 0, 100), E = fields.expected;
+      p.inUse = true; p.partly = true; p.pctBase = pct;
+      p.estPast = (!F.pastUnknown && F.pastUses.trim() !== '') ? parseInt(F.pastUses, 10) : Math.round(E * (1 - pct / 100));
+    }
+    S.products.push(p); toast('Added to your collection 💖');
+  }
+  if (!S.settings.customCats.includes(F.cat) && !BASE_CATS.includes(F.cat) && F.cat !== 'Holy grail') S.settings.customCats.push(F.cat);
+  F.dirty = false; gcImages(); save(); UI.form = null;
+  if (UI.stack.length) { UI.form = null; pop(); } else render();
+}
+function openForm(F) { UI.form = F; push({ t: 'form', form: true }); }
+function closePageAction() {
+  const top = UI.stack[UI.stack.length - 1];
+  if (top && top.form && UI.form && UI.form.dirty) { confirmSheet({ title: 'Discard changes?', msg: 'Your edits to this product won’t be saved.', ok: 'Discard', danger: true }, () => { UI.form = null; pop(); }); return; }
+  if (top && top.form) UI.form = null;
+  pop();
+}
+
+/* ---------- share-image drawing ---------- */
+const FONT = '"DM Sans", system-ui, -apple-system, sans-serif';
+const loadImg = s => new Promise(r => { if (!s) return r(null); const i = new Image(); i.onload = () => r(i); i.onerror = () => r(null); i.src = s; });
+const svgImg = svg => loadImg('data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg));
+async function ensureFonts() { try { await Promise.all([document.fonts.load('800 48px "DM Sans"'), document.fonts.load('600 30px "DM Sans"')]); } catch (e) { /* ignore */ } }
+function rr(c, x, y, w, h, r) { c.beginPath(); if (c.roundRect) c.roundRect(x, y, w, h, r); else { c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); } }
+function txt(c, s, x, y, font, color, align = 'left', maxW) {
+  c.font = font; c.fillStyle = color; c.textAlign = align; c.textBaseline = 'alphabetic';
+  let t = String(s); if (maxW) { while (c.measureText(t).width > maxW && t.length > 1) t = t.slice(0, -1); if (t !== String(s)) t = t.trimEnd() + '…'; }
+  c.fillText(t, x, y);
+}
+function drawPhoto(c, img, x, y, w, h, r, contain) {
+  c.save(); rr(c, x, y, w, h, r); c.clip(); c.fillStyle = '#F3F1FC'; c.fillRect(x, y, w, h);
+  if (img) {
+    const iw = img.width, ih = img.height, s = contain ? Math.min(w * .84 / iw, h * .84 / ih) : Math.max(w / iw, h / ih);
+    c.drawImage(img, x + (w - iw * s) / 2, y + (h - ih * s) / 2, iw * s, ih * s);
+  } else { c.font = `${Math.min(w, h) * .4}px ${FONT}`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillStyle = '#6B5B95'; c.fillText('🎀', x + w / 2, y + h / 2); }
+  c.restore();
+}
+function cardBase(W, H) {
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const c = cv.getContext('2d');
+  const g = c.createLinearGradient(0, 0, W, H); g.addColorStop(0, '#FFF1EE'); g.addColorStop(.6, '#FFE0E6'); g.addColorStop(1, '#E4DEF7'); c.fillStyle = g; c.fillRect(0, 0, W, H);
+  c.fillStyle = 'rgba(255,255,255,.5)'; c.beginPath(); c.arc(W - 60, 80, 170, 0, 7); c.fill(); c.beginPath(); c.arc(40, H - 120, 130, 0, 7); c.fill();
+  return { cv, c };
+}
+async function appTag(c, W, H, duckImg) {
+  const y = H - 70; c.fillStyle = 'rgba(255,255,255,.85)'; rr(c, W - 330, y - 42, 280, 64, 32); c.fill();
+  if (duckImg) c.drawImage(duckImg, W - 322, y - 50, 68, 68);
+  txt(c, APP_NAME, W - 246, y + 2, `700 28px ${FONT}`, '#1E2B4D', 'left', 190);
+}
+const duckForCanvas = () => svgImg(duck(200, { sparkle: false }).replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ').replace('style="overflow:visible"', ''));
+
+async function drawProgressCard(p, tab) {
+  await ensureFonts();
+  const photos = [...p.photos].sort((a, b) => a.ts - b.ts); const W = 1080;
+  const imgs = await Promise.all(photos.map(x => loadImg(src(x.img)))); const dk = await duckForCanvas();
+  const last = photos[photos.length - 1], lastPct = last ? last.pct : pctLeft(p), asOf = last ? dayKey(last.ts) : today(), usesNow = last ? last.uses : totalUses(p);
+  let bodyH, rows = 1; const shown = photos.map((x, i) => ({ x, im: imgs[i] }));
+  const grid = shown.slice(-12);
+  if (tab === 'all') { rows = Math.max(1, Math.ceil(grid.length / 3)); bodyH = rows * 326; } else bodyH = 520;
+  const H = 150 + bodyH + 390, { cv, c } = cardBase(W, H);
+  txt(c, 'My pan progress', 60, 100, `800 56px ${FONT}`, '#1E2B4D'); c.fillStyle = '#F08CA3'; c.font = `40px ${FONT}`; c.fillText('✨', 560, 98);
+  const top = 150;
+  if (tab === 'all') {
+    grid.forEach((g, i) => { const x = 60 + (i % 3) * 326, y = top + Math.floor(i / 3) * 326; drawPhoto(c, g.im, x, y, 306, 306, 36); c.fillStyle = 'rgba(30,43,77,.72)'; rr(c, x + 10, y + 306 - 56, 286, 44, 22); c.fill(); txt(c, `${fmtDate(dayKey(g.x.ts), true)} · ${g.x.pct}% left`, x + 153, y + 306 - 26, `700 22px ${FONT}`, '#fff', 'center', 270); });
+    if (!grid.length) txt(c, 'No progress photos yet', W / 2, top + 200, `600 34px ${FONT}`, '#6B5B95', 'center');
+  } else if (shown.length >= 2) {
+    const a = shown[0], b = shown[shown.length - 1];
+    [[a, 'BEFORE', 60], [b, 'NOW', 570]].forEach(([g, l, x]) => { drawPhoto(c, g.im, x, top, 450, 450, 44); txt(c, l, x + 225, top + 490, `800 26px ${FONT}`, '#6B5B95', 'center'); txt(c, `${fmtDate(dayKey(g.x.ts), true)} · ${g.x.pct}% left`, x + 225, top + 520, `600 24px ${FONT}`, '#1E2B4D', 'center', 440); });
+  } else if (shown.length === 1) { drawPhoto(c, shown[0].im, 240, top, 600, 480, 44); txt(c, `${fmtDate(dayKey(shown[0].x.ts))} · ${shown[0].x.pct}% left`, W / 2, top + 520, `600 26px ${FONT}`, '#1E2B4D', 'center'); }
+  else { drawPhoto(c, await loadImg(src(p.img)), 240, top, 600, 480, 44, p.bgRemoved); }
+  const fy = top + bodyH + 20; c.fillStyle = 'rgba(255,255,255,.92)'; rr(c, 40, fy, W - 80, 250, 40); c.fill();
+  txt(c, p.name, 80, fy + 80, `800 46px ${FONT}`, '#1E2B4D', 'left', W - 160);
+  if (p.brand) txt(c, p.brand, 80, fy + 126, `600 30px ${FONT}`, '#6B5B95', 'left', W - 160);
+  txt(c, `As of ${fmtDate(asOf)} · ${lastPct}% left · ${usesNow} uses`, 80, fy + 180, `600 30px ${FONT}`, '#1E2B4D', 'left', W - 160);
+  await appTag(c, W, H, dk); return cv;
+}
+async function drawFinishedCard(p) {
+  await ensureFonts(); const W = 1080, H = 1350, { cv, c } = cardBase(W, H), dk = await duckForCanvas(), im = await loadImg(src(p.img));
+  if (dk) c.drawImage(dk, W / 2 - 130, 40, 260, 260);
+  txt(c, 'Used it up!', W / 2, 400, `800 96px ${FONT}`, '#1E2B4D', 'center'); txt(c, 'Every last bit ✨', W / 2, 455, `600 36px ${FONT}`, '#6B5B95', 'center');
+  drawPhoto(c, im, W / 2 - 220, 500, 440, 440, 60, p.bgRemoved); c.fillStyle = '#F08CA3'; c.beginPath(); c.arc(W / 2 + 220, 940, 48, 0, 7); c.fill(); c.strokeStyle = '#fff'; c.lineWidth = 9; c.lineCap = 'round'; c.lineJoin = 'round'; c.beginPath(); c.moveTo(W / 2 + 198, 940); c.lineTo(W / 2 + 216, 958); c.lineTo(W / 2 + 246, 922); c.stroke();
+  if (p.brand) txt(c, p.brand.toUpperCase(), W / 2, 1010, `700 28px ${FONT}`, '#6B5B95', 'center', 900); txt(c, p.name, W / 2, 1060, `800 48px ${FONT}`, '#1E2B4D', 'center', 940);
+  [['DAYS', daysLasted(p)], ['USES', (isEstimated(p) ? '~' : '') + totalUses(p)], ['FINISHED', finishedProducts().length]].forEach(([l, v], i) => { const x = 80 + i * 300; c.fillStyle = 'rgba(255,255,255,.9)'; rr(c, x, 1100, 280, 130, 30); c.fill(); txt(c, v, x + 140, 1170, `800 56px ${FONT}`, '#1E2B4D', 'center'); txt(c, l, x + 140, 1208, `700 22px ${FONT}`, '#6B5B95', 'center'); });
+  await appTag(c, W, H, dk); return cv;
+}
+async function drawRecapCard() {
+  await ensureFonts(); const m = monthStats(), W = 1080, H = 1350, { cv, c } = cardBase(W, H), dk = await duckForCanvas(), im = m.most ? await loadImg(src(m.most.img)) : null;
+  txt(c, 'MONTHLY REPORT', 80, 130, `700 30px ${FONT}`, '#6B5B95'); txt(c, m.label, 80, 220, `800 84px ${FONT}`, '#1E2B4D', 'left', 920); txt(c, `${m.used} of ${m.total} products used`, 80, 290, `600 38px ${FONT}`, '#1E2B4D');
+  if (dk) c.drawImage(dk, W - 260, 70, 200, 200);
+  [['FINISHED', m.fin.length], ['BEST STREAK', m.best], ['USED', m.used]].forEach(([l, v], i) => { const x = 80 + i * 300; c.fillStyle = 'rgba(255,255,255,.9)'; rr(c, x, 350, 280, 150, 30); c.fill(); txt(c, v, x + 140, 430, `800 64px ${FONT}`, '#1E2B4D', 'center'); txt(c, l, x + 140, 475, `700 22px ${FONT}`, '#6B5B95', 'center'); });
+  c.fillStyle = 'rgba(255,255,255,.9)'; rr(c, 80, 550, W - 160, 560, 44); c.fill(); txt(c, 'MOST-USED PRODUCT', 130, 620, `700 26px ${FONT}`, '#6B5B95');
+  if (m.most) { drawPhoto(c, im, 130, 660, 360, 360, 44, m.most.bgRemoved); txt(c, m.most.name, 530, 780, `800 44px ${FONT}`, '#1E2B4D', 'left', 440); if (m.most.brand) txt(c, m.most.brand, 530, 830, `600 30px ${FONT}`, '#6B5B95', 'left', 440); txt(c, plural(m.mc, 'use') + ' this month', 530, 890, `700 32px ${FONT}`, '#F08CA3', 'left', 440); }
+  else txt(c, 'Log some uses to find your favourite!', W / 2, 860, `600 34px ${FONT}`, '#6B5B95', 'center');
+  txt(c, m.fin.length ? `Finished: ${m.fin.map(p => p.name).join(', ')}` : 'Keep going — empties are coming!', 80, 1180, `600 30px ${FONT}`, '#1E2B4D', 'left', 920);
+  await appTag(c, W, H, dk); return cv;
+}
+async function drawStatCard(kind) {
+  await ensureFonts(); const W = 1080, H = 1080, { cv, c } = cardBase(W, H), dk = await duckForCanvas();
+  const cut = rangeCut(), inR = S.products.filter(p => p.status !== 'archived' && (cut === '0000-00-00' || dayKey(p.added) >= cut || p.logs.some(x => x.day >= cut) || (p.finishDate && p.finishDate >= cut)));
+  const v = kind === 'fin' ? inR.filter(p => p.status === 'finished').length : inR.length;
+  if (dk) c.drawImage(dk, W / 2 - 150, 90, 300, 300);
+  txt(c, v, W / 2, 640, `800 230px ${FONT}`, '#1E2B4D', 'center'); txt(c, kind === 'fin' ? 'PRODUCTS FINISHED' : 'PRODUCTS IN MY COLLECTION', W / 2, 720, `700 38px ${FONT}`, '#6B5B95', 'center');
+  txt(c, ({ '3m': 'Last 3 months', '6m': 'Last 6 months', '1y': 'Last year', all: 'All time' })[UI.stat.range], W / 2, 790, `600 32px ${FONT}`, '#1E2B4D', 'center');
+  await appTag(c, W, H, dk); return cv;
+}
+async function exportCanvas(cv, name, title) {
+  const blob = await new Promise(r => cv.toBlob(r, 'image/png'));
+  if (!blob) { toast('Couldn’t create the image.'); return; }
+  const file = new File([blob], name, { type: 'image/png' });
+  try { if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title }); return; } }
+  catch (e) { if (e && e.name === 'AbortError') return; }
+  downloadBlob(blob, name); toast('Image saved to your downloads ✨');
+}
+function downloadBlob(blob, name) {
+  const a = document.createElement('a'), u = URL.createObjectURL(blob); a.href = u; a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000);
+}
+/** Show a share sheet with a live canvas preview of exactly what will be exported. */
+async function showShare(ctx) {
+  const token = uid();
+  const tabs = ctx.kind === 'progress' ? `<div class="seg mt12"><button class="${ctx.tab === 'ba' ? 'on' : ''}" data-act="shareTab" data-v="ba">Before & after</button><button class="${ctx.tab === 'all' ? 'on' : ''}" data-act="shareTab" data-v="all">All photos</button></div>` : '';
+  sheet(`<h2>Share</h2><div class="muted sm">Preview of exactly what you’ll post</div>${tabs}<div class="mt12" id="shareBox" style="min-height:200px;display:grid;place-items:center"><div class="spin"></div></div><button class="btn pink block mt16" id="shareGo" data-act="shareGo" style="min-height:54px" disabled>${ic('share')} Share image</button>`);
+  shareCtx = ctx; ctx.token = token;
+  try {
+    let cv; const p = ctx.id && byId(ctx.id);
+    if (ctx.kind === 'progress') cv = await drawProgressCard(p, ctx.tab); else if (ctx.kind === 'finished') cv = await drawFinishedCard(p); else if (ctx.kind === 'recap') cv = await drawRecapCard(); else cv = await drawStatCard(ctx.v);
+    if (!shareCtx || shareCtx.token !== token) return;
+    cv.className = 'sharecv'; ctx.cv = cv; const box = $('#shareBox'); if (!box) return; box.innerHTML = ''; box.appendChild(cv); $('#shareGo').disabled = false;
+  } catch (e) { const box = $('#shareBox'); if (box) box.innerHTML = '<div class="errm">Couldn’t build the image. Please try again.</div>'; }
+}
+/* =====================================================================
+   EVENT HANDLING
+   ===================================================================== */
+let sheetCtx = {};
+const P = id => byId(id);
+const ACT = {
+  tab: d => setTab(d.v),
+  addProduct: () => { if (UI.locked) return; openForm(newForm()); },
+  openProduct: d => { if (UI.locked) return; if (UI.stack.length && UI.stack[UI.stack.length - 1].t === 'detail' && UI.stack[UI.stack.length - 1].id === d.id) return; push({ t: 'detail', id: d.id }); },
+  closePage: () => closePageAction(),
+  editProduct: d => { const p = P(d.id); if (p) openForm(formFromProduct(p)); },
+  toggleFav: d => { const p = P(d.id); if (p) { p.fav = !p.fav; save(); render(); } },
+  usePlus: d => logUse(d.id),
+  useMinus: d => { const p = P(d.id); if (!p || !p.logs.length) return; const l = p.logs[p.logs.length - 1]; removeLog(p, l.id); lastLogs = lastLogs.filter(x => x.lid !== l.id); save(); render(); toast('Removed latest use'); },
+  raiseExpected: d => { const p = P(d.id); if (!p) return; p.expected = expectedUses(p) + 10; p.baseLogs = p.logs.length; p.pctBase = 10 / p.expected * 100; save(); render(); toast('Raised expected uses by 10 ✨'); },
+  setPct: d => { const p = P(d.id), v = +($('#pctSlider') || {}).value; if (!p || isNaN(v)) return; recalibrate(p, v); save(); render(); toast('Updated: ' + v + '% left'); },
+  recalibrate: d => {
+    const p = P(d.id); if (!p) return; sheetCtx = { id: p.id };
+    sheet(`<h2>Recalibrate</h2><p class="muted sm">Update roughly how much is left. Everything recalculates cleanly.</p><div class="field"><div class="row between"><span class="lbl">Approx. % left</span><b id="rcLbl">${pctLeft(p)}%</b></div><input type="range" min="0" max="100" step="5" id="rcPct" value="${pctLeft(p)}" data-in="rcPct" aria-label="Percent left"></div>
+      <div class="field"><label class="lbl" for="rcPast">Approx. past uses (optional)</label><input class="inp" id="rcPast" inputmode="numeric" placeholder="leave blank to estimate" value="${p.estPast || ''}"><div class="errm" id="rcErr" role="alert" hidden></div></div><button class="btn pink block mt16" data-act="rcSave">Recalibrate</button>`);
+  },
+  rcSave: () => {
+    const p = P(sheetCtx.id); if (!p) return; const v = +$('#rcPct').value, raw = $('#rcPast').value.trim();
+    if (raw !== '' && !/^\d+$/.test(raw)) { const e = $('#rcErr'); e.textContent = 'Please enter a whole number.'; e.hidden = false; return; }
+    recalibrate(p, v, raw === '' ? null : +raw); save(); closeSheet(); render(); toast('Recalibrated ✨');
+  },
+  editStart: d => { const p = P(d.id); if (!p) return; sheetCtx = { id: p.id }; sheet(`<h2>${p.inUse ? 'Tracking since' : 'Start date'}</h2><div class="field"><label class="lbl" for="stDate">Date</label><input class="inp" type="date" id="stDate" value="${p.startDate || ''}" max="${today()}"><div class="errm" id="stErr" role="alert" hidden></div></div><div class="row mt16"><button class="btn ghost grow" data-act="stClear">Clear</button><button class="btn pink grow" data-act="stSave">Save</button></div>`); },
+  stSave: () => { const p = P(sheetCtx.id), v = $('#stDate').value; if (!p) return; if (!validDate(v) || v > today()) { const e = $('#stErr'); e.textContent = v > today() ? 'Start date can’t be in the future.' : 'Please pick a valid date.'; e.hidden = false; return; } p.startDate = v; p.startAuto = false; save(); closeSheet(); render(); },
+  stClear: () => { const p = P(sheetCtx.id); if (p) { p.startDate = null; p.startAuto = false; save(); } closeSheet(); render(); },
+  histMore: d => { UI.histMore[d.id] = true; render(); },
+  delLog: d => { const p = P(d.id); if (p && removeLog(p, d.lid)) { lastLogs = lastLogs.filter(x => x.lid !== d.lid); save(); render(); toast('Log deleted'); } },
+  finish: d => confirmSheet({ title: 'Mark as finished?', msg: 'Yay! You can restore it later if you tapped by mistake.', ok: 'Yes, used it up!' }, () => finishProduct(d.id)),
+  toWishlist: d => { const p = P(d.id); if (!p) return; S.wishlist.push({ id: uid(), name: p.name, price: p.price, link: '', img: p.img, added: Date.now(), sample: false }); save(); toast('Added to wishlist — 30-day timer started 💖'); },
+  duplicate: d => { const p = P(d.id); if (!p) return; const F = formFromProduct(p); F.id = null; F.mode = 'new'; F.opened = ''; F.openedApprox = false; F.bought = ''; F.expTouched = true; F.dirty = true; openForm(F); },
+  toProject: d => { const p = P(d.id); if (!p) return; const i = S.projectIds.indexOf(p.id); if (i >= 0) S.projectIds.splice(i, 1); else S.projectIds.push(p.id); save(); render(); toast(i >= 0 ? 'Removed from Project' : 'Added to Project 🎨'); },
+  archive: d => { const p = P(d.id); if (!p) return; if (p.status === 'archived') { p.status = 'active'; toast('Unarchived'); } else { p.status = 'archived'; S.basket = S.basket.filter(x => x !== p.id); toast('Archived'); } save(); render(); },
+  restore: d => restoreProduct(d.id),
+  verdict: d => {
+    const p = P(d.id); if (!p) return; sheetCtx = { id: p.id, v: p.verdict };
+    sheet(`<h2>Would I repurchase?</h2><div class="muted sm clamp">${esc(p.name)}</div><div class="three mt16" role="group">${[['yes', '💖', 'Yes'], ['maybe', '🤔', 'Maybe'], ['no', '🙅', 'No']].map(([k, e, l]) => `<button class="sbox vbtn" data-act="pickVerdict" data-v="${k}" style="min-height:84px;border:3px solid ${p.verdict === k ? 'var(--pink)' : 'transparent'}" aria-pressed="${p.verdict === k}"><b>${e}</b><span class="lbl">${l}</span></button>`).join('')}</div>
+      <div class="field"><label class="lbl" for="vNote">Short note (optional)</label><input class="inp" id="vNote" maxlength="200" value="${esc(p.note)}" placeholder="e.g. loved the glow!"></div><div class="row mt16"><button class="btn ghost grow" data-act="closeSheet">Skip</button><button class="btn pink grow" data-act="saveVerdict">Save</button></div>`);
+  },
+  pickVerdict: (d, el) => { sheetCtx.v = d.v; $$('.vbtn').forEach(b => { const on = b === el; b.style.borderColor = on ? 'var(--pink)' : 'transparent'; b.setAttribute('aria-pressed', on); }); },
+  saveVerdict: () => { const p = P(sheetCtx.id); if (!p) return; p.verdict = sheetCtx.v || null; p.note = ($('#vNote').value || '').trim().slice(0, 200); save(); closeSheet(); render(); toast('Saved 💖'); },
+  /* celebration */
+  celebDone: d => { closeCeleb(); ACT.verdict({ id: d.id }); },
+  shareFinished: d => showShare({ kind: 'finished', id: d.id }),
+  onbNext: () => { UI.celeb.step++; renderCeleb(); },
+  onbDone: d => { S.settings.onboarded = true; UI.celeb = null; renderCeleb(); if (d.v === 'demo') loadSample(); else { save(); render(); } },
+  /* progress photos */
+  addPhoto: d => {
+    const p = P(d.id); if (!p) return; sheetCtx = { id: p.id, data: null };
+    sheet(`<h2>Progress photo</h2><div class="photoBox mt12" id="ppBox">${ic('camera')}</div><div class="row mt12" style="justify-content:center;gap:8px"><button class="btn sm soft" data-act="ppPick" data-v="cam">${ic('camera')} Camera</button><button class="btn sm soft" data-act="ppPick" data-v="gal">Gallery</button></div><div class="errm" id="ppErr" role="alert" hidden></div>
+      <div class="field"><div class="row between"><span class="lbl">Approx. % left</span><b id="ppLbl">${pctLeft(p)}%</b></div><input type="range" min="0" max="100" step="1" id="ppPct" value="${pctLeft(p)}" data-in="ppPct" aria-label="Percent left"></div><div class="hint">Saved with today’s date and ${totalUses(p)} uses so far.</div>
+      <button class="btn pink block mt16" data-act="ppSave">Save photo</button><input type="file" id="ppCam" accept="image/*" capture="environment" hidden><input type="file" id="ppGal" accept="image/*" hidden>`);
+  },
+  ppPick: d => $(d.v === 'cam' ? '#ppCam' : '#ppGal').click(),
+  ppSave: async () => {
+    const p = P(sheetCtx.id); if (!p) return; const er = $('#ppErr');
+    if (!sheetCtx.data) { er.textContent = 'Please add a photo first.'; er.hidden = false; return; }
+    const id = await putImage(sheetCtx.data);
+    p.photos.push({ id: uid(), img: id, ts: Date.now(), uses: totalUses(p), pct: +$('#ppPct').value }); save(); closeSheet(); render(); toast('Progress photo saved 📸');
+  },
+  viewPhoto: d => { const p = P(d.id), ph = p && p.photos.find(x => x.id === d.pid); if (!ph) return; sheetCtx = { id: p.id, pid: ph.id }; sheet(`<img src="${src(ph.img)}" alt="Progress photo" style="width:100%;border-radius:24px"><div class="mt12" style="text-align:center"><b>${fmtDate(dayKey(ph.ts))}</b><div class="muted">${plural(ph.uses, 'use')} · ${ph.pct}% left</div></div><div class="row mt16"><button class="btn danger grow" data-act="delPhoto">${ic('trash')} Delete</button><button class="btn grow" data-act="closeSheet">Close</button></div>`); },
+  delPhoto: () => { const p = P(sheetCtx.id); if (!p) return; p.photos = p.photos.filter(x => x.id !== sheetCtx.pid); gcImages(); save(); closeSheet(); render(); toast('Photo deleted'); },
+  shareProgress: d => showShare({ kind: 'progress', id: d.id, tab: 'ba' }),
+  shareTab: d => { if (shareCtx) showShare({ ...shareCtx, tab: d.v }); },
+  shareGo: async () => { const c = shareCtx; if (!c || !c.cv) return; const p = c.id && byId(c.id); await exportCanvas(c.cv, `${(p ? p.name : c.kind).replace(/[^\w]+/g, '-').slice(0, 30)}-${c.kind}.png`, APP_NAME); },
+  shareRecap: () => showShare({ kind: 'recap' }),
+  shareStat: d => showShare({ kind: 'stat', v: d.v }),
+  /* form */
+  pickPhoto: d => $(d.v === 'cam' ? '#fileCam' : '#fileGal').click(),
+  removeBg: () => removeBgAction(),
+  useOriginal: () => { const F = UI.form; if (F && F.origData) { F.imgData = F.origData; F.bgRemoved = false; render(); } },
+  clearPhoto: () => { const F = UI.form; F.imgData = null; F.origData = null; F.imgId = null; F.bgRemoved = false; F.dirty = true; render(); },
+  setMode: d => { UI.form.mode = d.v; UI.form.dirty = true; render(); },
+  setFormCat: d => { const F = UI.form; F.cat = d.v; F.dirty = true; if (!F.expTouched) F.expected = String(suggestExpected(d.v, F.id).n); render(); },
+  newCat: () => { UI.form.newCat = !UI.form.newCat; render(); const i = $('#newCatInp'); if (i) i.focus(); },
+  saveCat: () => { const i = $('#newCatInp'), v = (i.value || '').trim().replace(/\s+/g, ' '); if (!v) { i.classList.add('err'); return; } const ex = [...BASE_CATS, ...S.settings.customCats, 'Holy grail', 'All'].find(c => c.toLowerCase() === v.toLowerCase()); const name = ex || v; if (!ex) { S.settings.customCats.push(name); save(); } UI.form.cat = name === 'Holy grail' || name === 'All' ? 'Other' : name; UI.form.newCat = false; UI.form.dirty = true; if (!UI.form.expTouched) UI.form.expected = String(suggestExpected(UI.form.cat).n); render(); },
+  useSuggested: d => { UI.form.expected = d.n; UI.form.expTouched = true; UI.form.dirty = true; UI.form.err.expected = null; delete UI.form.err.expected; render(); },
+  ftoggle: d => { UI.form[d.v] = !UI.form[d.v]; UI.form.dirty = true; render(); },
+  pastUnknown: () => { UI.form.pastUnknown = !UI.form.pastUnknown; if (UI.form.pastUnknown) UI.form.pastUses = ''; delete UI.form.err.pastUses; render(); },
+  setPao: d => { UI.form.pao = d.v; UI.form.dirty = true; delete UI.form.err.pao; render(); },
+  saveProduct: () => saveProduct(),
+  deleteProduct: d => confirmSheet({ title: 'Delete this product?', msg: 'Its photo, history and progress photos will be removed for good.', ok: 'Delete', danger: true }, () => {
+    const id = d.id; S.products = S.products.filter(p => p.id !== id); S.basket = S.basket.filter(x => x !== id); S.projectIds = S.projectIds.filter(x => x !== id);
+    UI.form = null; const n = UI.stack.length; UI.stack = []; gcImages(); save(); render(); if (n) { try { history.go(-n); } catch (e) { /* ignore */ } } toast('Product deleted');
+  }),
+  /* empties / wishlist / project */
+  openEmpties: () => push({ t: 'empties' }), openWishlist: () => push({ t: 'wishlist' }), openRecap: () => push({ t: 'recap' }),
+  openSearch: () => { UI.searchQ = ''; push({ t: 'search' }); setTimeout(() => { const i = $('#searchInp'); if (i) i.focus(); }, 340); },
+  empTab: d => { UI.empties.tab = d.v; render(); }, empCat: d => { UI.empties.cat = d.v; render(); }, empVer: d => { UI.empties.verdict = d.v; render(); },
+  addWish: () => { sheetCtx = { data: null }; sheet(`<h2>Add to wishlist</h2><div class="field"><label class="lbl" for="wName">Name *</label><input class="inp" id="wName" maxlength="120" autocomplete="off"><div class="errm" id="wNameE" role="alert" hidden></div></div><div class="two"><div class="field"><label class="lbl" for="wPrice">Price (₹)</label><input class="inp" id="wPrice" inputmode="decimal"><div class="errm" id="wPriceE" role="alert" hidden></div></div><div class="field"><label class="lbl" for="wLink">Link</label><input class="inp" id="wLink" type="url" maxlength="300" placeholder="https://"></div></div><div class="field"><div class="lbl">Photo (optional)</div><div class="row"><button class="btn sm soft" data-act="wishPick">${ic('camera')} Choose photo</button><span id="wPrev" class="sm muted"></span></div></div><input type="file" id="wishFile" accept="image/*" hidden><button class="btn pink block mt16" data-act="wishSave">Start 30-day timer</button>`); },
+  wishPick: () => $('#wishFile').click(),
+  wishSave: async () => {
+    const n = $('#wName').value.trim(), pr = $('#wPrice').value.replace(/[₹,\s]/g, ''); let bad = false;
+    const e1 = $('#wNameE'), e2 = $('#wPriceE'); e1.hidden = e2.hidden = true;
+    if (!n) { e1.textContent = 'What are you eyeing? Give it a name.'; e1.hidden = false; bad = true; }
+    if (pr !== '' && !/^\d+(\.\d{1,2})?$/.test(pr)) { e2.textContent = 'Enter a valid price.'; e2.hidden = false; bad = true; }
+    if (bad) return; let link = $('#wLink').value.trim(); if (link && !/^https?:\/\//i.test(link)) link = 'https://' + link;
+    const img = sheetCtx.data ? await putImage(sheetCtx.data) : null;
+    S.wishlist.push({ id: uid(), name: n, price: pr === '' ? null : +pr, link, img, added: Date.now(), sample: false }); save(); closeSheet(); render(); toast('Added — see you in 30 days 💖');
+  },
+  wishRemove: d => confirmSheet({ title: 'Remove from wishlist?', msg: 'Good job resisting — or just changing your mind!', ok: 'Remove', danger: true }, () => { S.wishlist = S.wishlist.filter(w => w.id !== d.id); gcImages(); save(); render(); }),
+  wishBought: d => {
+    const w = S.wishlist.find(x => x.id === d.id); if (!w || Math.floor(dnum(today()) - dnum(dayKey(w.added))) < 30) return; sheetCtx = { id: w.id };
+    sheet(`<h2>You waited 30 days! 🎉</h2><p class="muted">Turn “${esc(w.name)}” into a product in your collection?</p><div class="row mt16"><button class="btn soft grow" data-act="wishJust">Just mark bought</button><button class="btn pink grow" data-act="wishToProduct">Add product</button></div>`);
+  },
+  wishJust: () => { S.wishlist = S.wishlist.filter(w => w.id !== sheetCtx.id); S.resets.push(today()); save(); closeSheet(); render(); toast('Marked bought — no-buy streak reset'); },
+  wishToProduct: () => { const w = S.wishlist.find(x => x.id === sheetCtx.id); if (!w) return; S.wishlist = S.wishlist.filter(x => x.id !== w.id); save(); closeSheet(); render(); const F = newForm({ name: w.name, price: w.price == null ? '' : String(w.price), bought: today(), imgId: w.img, dirty: true }); UI.stack = UI.stack.filter(x => x.t !== 'form'); setTimeout(() => openForm(F), 340); },
+  newChallenge: () => { const t = today(); sheet(`<h2>New challenge</h2><div class="field"><label class="lbl" for="chTitle">Title *</label><input class="inp" id="chTitle" maxlength="80" value="Use up 10 products in 3 months"><div class="errm" id="chTE" role="alert" hidden></div></div><div class="field"><label class="lbl" for="chTarget">Products to finish *</label><input class="inp" id="chTarget" inputmode="numeric" value="10"><div class="errm" id="chGE" role="alert" hidden></div></div><div class="two"><div class="field"><label class="lbl" for="chStart">Start</label><input class="inp" type="date" id="chStart" value="${t}"></div><div class="field"><label class="lbl" for="chEnd">End</label><input class="inp" type="date" id="chEnd" value="${addMonths(t, 3)}"></div></div><div class="errm" id="chDE" role="alert" hidden></div><button class="btn pink block mt16" data-act="chSave">Create challenge</button>`); },
+  chSave: () => {
+    const ti = $('#chTitle').value.trim(), tg = $('#chTarget').value.trim(), s = $('#chStart').value, e = $('#chEnd').value; let bad = false;
+    ['chTE', 'chGE', 'chDE'].forEach(i => { $('#' + i).hidden = true; });
+    const er = (i, m) => { const x = $('#' + i); x.textContent = m; x.hidden = false; bad = true; };
+    if (!ti) er('chTE', 'Please name your challenge.'); if (!/^\d+$/.test(tg) || +tg < 1 || +tg > 500) er('chGE', 'Enter a number between 1 and 500.');
+    if (!validDate(s) || !validDate(e)) er('chDE', 'Please choose both dates.'); else if (e < s) er('chDE', 'End date must be after the start date.');
+    if (bad) return; S.challenges.push({ id: uid(), title: ti, target: +tg, start: s, end: e, sample: false }); save(); closeSheet(); render(); toast('Challenge created 🎯');
+  },
+  delChallenge: d => confirmSheet({ title: 'Delete challenge?', msg: 'Your finished products stay safe.', ok: 'Delete', danger: true }, () => { S.challenges = S.challenges.filter(c => c.id !== d.id); save(); render(); }),
+  resetNoBuy: () => confirmSheet({ title: 'Reset no-buy streak?', msg: 'We’ll start counting from today. Treats happen!', ok: 'Reset' }, () => { S.resets.push(today()); save(); render(); toast('Streak reset — fresh start 🌱'); }),
+  /* stats */
+  statRange: d => { UI.stat.range = d.v; render(); }, statStatus: d => { UI.stat.status = d.v; render(); }, statCat: d => { UI.stat.cat = d.v; render(); },
+  statSort: () => sheet(`<h2>Sort list</h2><div class="list mt12">${[['added', 'Date added'], ['name', 'Name'], ['uses', 'Uses logged']].map(([k, l]) => `<button class="btn block ${UI.stat.sort === k ? '' : 'soft'}" data-act="statSortSet" data-v="${k}">${l}</button>`).join('')}</div>`),
+  statSortSet: d => { UI.stat.sort = d.v; closeSheet(); render(); },
+  /* profile */
+  toggleDark: () => { S.settings.dark = !S.settings.dark; save(); render(); },
+  exportJson: () => exportJson(), exportCsv: d => exportCsv(d.v),
+  importPick: () => $('#importFile').click(),
+  loadSample: () => loadSample(), clearSample: () => confirmSheet({ title: 'Clear sample data?', msg: 'Only the demo items are removed — your own products stay.', ok: 'Clear', danger: true }, () => clearSample()),
+  /* home */
+  toggleBasket: () => { S.settings.basketCollapsed = !S.settings.basketCollapsed; save(); render(); },
+  editBasket: () => basketSheet(),
+  bToggle: d => { const i = S.basket.indexOf(d.id); if (i >= 0) S.basket.splice(i, 1); else S.basket.push(d.id); save(); basketSheet(); render(); },
+  bMove: d => { const i = S.basket.indexOf(d.id), j = i + +d.dir; if (i < 0 || j < 0 || j >= S.basket.length) return; [S.basket[i], S.basket[j]] = [S.basket[j], S.basket[i]]; save(); basketSheet(); render(); },
+  setCat: d => { UI.cat = d.v; render(); },
+  clearFilters: () => { UI.cat = 'All'; UI.filters = { fav: false, expiring: false, estimated: false, project: false }; render(); },
+  filterSheet: () => filterSheet(),
+  fToggle: d => { UI.filters[d.v] = !UI.filters[d.v]; filterSheet(); render(); },
+  toggleSelMode: () => { UI.selMode = !UI.selMode; UI.sel.clear(); render(); },
+  toggleSel: d => { UI.sel.has(d.id) ? UI.sel.delete(d.id) : UI.sel.add(d.id); render(); },
+  sortSheet: () => sheet(`<h2>Sort by</h2><div class="list mt12">${[['added', 'Newest first'], ['name', 'Name A–Z'], ['uses', 'Most used'], ['expiry', 'Expiring soonest']].map(([k, l]) => `<button class="btn block ${UI.sort === k ? '' : 'soft'}" data-act="sortSet" data-v="${k}">${l}</button>`).join('')}</div>`),
+  sortSet: d => { UI.sort = d.v; closeSheet(); render(); },
+  cycleCols: () => { S.settings.cols = S.settings.cols === 4 ? 5 : S.settings.cols === 5 ? 3 : 4; save(); render(); },
+  bulk: d => {
+    const ids = [...UI.sel]; if (!ids.length) { toast('Select some products first'); return; }
+    const done = m => { UI.sel.clear(); UI.selMode = false; save(); render(); toast(m); };
+    if (d.v === 'basket') { ids.forEach(id => { if (!S.basket.includes(id)) S.basket.push(id); }); done('Added to basket'); }
+    else if (d.v === 'fav') { ids.forEach(id => { const p = P(id); if (p) p.fav = true; }); done('Marked as holy grail 💖'); }
+    else if (d.v === 'project') { ids.forEach(id => { if (!S.projectIds.includes(id)) S.projectIds.push(id); }); done('Added to Project'); }
+    else if (d.v === 'archive') { ids.forEach(id => { const p = P(id); if (p) { p.status = 'archived'; S.basket = S.basket.filter(x => x !== id); } }); done('Archived'); }
+    else if (d.v === 'delete') confirmSheet({ title: `Delete ${plural(ids.length, 'product')}?`, msg: 'This can’t be undone.', ok: 'Delete', danger: true }, () => { S.products = S.products.filter(p => !ids.includes(p.id)); S.basket = S.basket.filter(x => !ids.includes(x)); S.projectIds = S.projectIds.filter(x => !ids.includes(x)); gcImages(); done('Deleted'); });
+  },
+  closeSheet: () => closeSheet(),
+  confirmOk: () => { const cb = sheetCb; closeSheet(); if (cb) cb(); },
+  undo: () => { $('#toastRoot').innerHTML = ''; undoLast(); },
+};
+function basketSheet() {
+  const old = $('#sheetRoot .sheet'), top = old ? old.scrollTop : 0;
+  const act = activeProducts(), inB = S.basket.map(byId).filter(p => p && p.status === 'active'), rest = act.filter(p => !S.basket.includes(p.id));
+  const row = (p, i, on) => `<div class="prow"><div class="th">${pimg(p)}</div><div class="grow"><b class="clamp">${esc(p.name)}</b></div>${on ? `<button class="rbtn" style="box-shadow:none;background:var(--card2)" data-act="bMove" data-id="${p.id}" data-dir="-1" aria-label="Move up" ${i === 0 ? 'disabled style="opacity:.3"' : ''}>${ic('arrowU')}</button><button class="rbtn" style="box-shadow:none;background:var(--card2)" data-act="bMove" data-id="${p.id}" data-dir="1" aria-label="Move down" ${i === inB.length - 1 ? 'disabled style="opacity:.3"' : ''}>${ic('arrowD')}</button>` : ''}<button class="sw ${on ? 'on' : ''}" data-act="bToggle" data-id="${p.id}" role="switch" aria-checked="${on}" aria-label="${on ? 'Remove from' : 'Add to'} basket"></button></div>`;
+  sheet(`<h2>Today basket</h2><p class="muted sm">Choose your everyday items and their order.</p><div class="list mt12">${inB.map((p, i) => row(p, i, true)).join('')}${rest.map(p => row(p, 0, false)).join('')}${!act.length ? '<div class="muted">Add some products first.</div>' : ''}</div><button class="btn block mt16" data-act="closeSheet">Done</button>`);
+  const n = $('#sheetRoot .sheet'); if (n) n.scrollTop = top;
+}
+function filterSheet() {
+  const f = UI.filters, row = (k, l) => `<div class="tog"><b>${l}</b><button class="sw ${f[k] ? 'on' : ''}" data-act="fToggle" data-v="${k}" role="switch" aria-checked="${f[k]}" aria-label="${l}"></button></div>`;
+  sheet(`<h2>Filter</h2>${row('fav', 'Holy grails ♥')}${row('expiring', 'Expiring soon')}${row('estimated', 'Estimated (pre-used)')}${row('project', 'In project pan')}<div class="row mt16"><button class="btn ghost grow" data-act="clearFilters">Reset</button><button class="btn grow" data-act="closeSheet">Done</button></div>`);
+}
+
+/* ---- delegated events ---- */
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]'); if (!el || el.disabled || el.getAttribute('aria-disabled') === 'true') return;
+  const f = ACT[el.dataset.act]; if (f) f(el.dataset, el, e);
+});
+function onField(e) {
+  const t = e.target, F = UI.form;
+  if (t.dataset && t.dataset.f && F) {
+    const k = t.dataset.f; F[k] = t.value; F.dirty = true; if (k === 'expected') F.expTouched = true;
+    if (F.err[k]) { delete F.err[k]; t.classList.remove('err'); t.setAttribute('aria-invalid', 'false'); const m = t.closest('.field'); if (m) $$('.errm', m).forEach(x => x.remove()); }
+    if (k === 'opened' || k === 'pao') { const x = $('#expPrev'); if (x) x.textContent = expPreview(F); }
+  } else if (t.dataset && t.dataset.in) {
+    const k = t.dataset.in;
+    if (k === 'pctPrev') $('#pctVal').textContent = t.value + '%';
+    else if (k === 'fpct' && F) { F.pct = +t.value; F.dirty = true; const v = F.pct; $('#pctLbl').textContent = (v >= 88 ? 'Full' : v >= 63 ? '¾ left' : v >= 38 ? '½ left' : v >= 15 ? '¼ left' : 'Almost done') + ' · ' + v + '%'; }
+    else if (k === 'rcPct') $('#rcLbl').textContent = t.value + '%';
+    else if (k === 'ppPct') $('#ppLbl').textContent = t.value + '%';
+    else if (k === 'search') { UI.searchQ = t.value; $('#searchRes').innerHTML = searchRows(); }
+  }
+}
+document.addEventListener('input', onField); document.addEventListener('change', e => {
+  onField(e); const t = e.target, f = t.files && t.files[0];
+  if (!f) return;
+  if (t.id === 'fileCam' || t.id === 'fileGal') handleFormFile(f).then(() => { t.value = ''; });
+  else if (t.id === 'ppCam' || t.id === 'ppGal') sheetPhoto(f, '#ppBox', 900);
+  else if (t.id === 'wishFile') sheetPhoto(f, '#wPrev', 600);
+  else if (t.id === 'importFile') { importFile(f); t.value = ''; }
+});
+async function sheetPhoto(file, sel, max) {
+  const ctx = sheetCtx; if (!/^image\//.test(file.type)) { toast('Please choose an image file.'); return; }
+  try { ctx.data = await compressImage(file, max, false); const b = $(sel); if (b) b.innerHTML = sel === '#ppBox' ? `<img src="${ctx.data}" alt="Preview">` : '✓ photo added'; const er = $('#ppErr'); if (er) er.hidden = true; }
+  catch (e) { toast('Couldn’t read that photo.'); }
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { if ($('#sheetRoot').firstChild) closeSheet(); else if (UI.celeb && UI.celeb.t === 'fin') closeCeleb(); else if (UI.stack.length) closePageAction(); return; }
+  const c = e.target.closest && e.target.closest('.bcard');
+  if (c && (e.key === 'Enter' || e.key === ' ') && e.target === c) { e.preventDefault(); if (!UI.locked) logUse(c.dataset.bid); }
+});
+
+/* ---- double-tap on basket cards (touch + mouse). Single taps NEVER log. ---- */
+let pd = null, lastTap = { id: null, t: 0, x: 0, y: 0 };
+document.addEventListener('pointerdown', e => { const c = e.target.closest('.bcard'); pd = c && !e.target.closest('[data-act]') ? { id: c.dataset.bid, x: e.clientX, y: e.clientY } : null; }, { passive: true });
+document.addEventListener('pointercancel', () => { pd = null; });
+document.addEventListener('pointerup', e => {
+  if (!pd) return; const d = pd; pd = null;
+  if (e.pointerType === 'mouse' && e.button !== 0) return;
+  if (Math.hypot(e.clientX - d.x, e.clientY - d.y) > 12) return;           // it was a scroll/drag
+  const now = Date.now();
+  if (lastTap.id === d.id && now - lastTap.t < 380 && Math.hypot(e.clientX - lastTap.x, e.clientY - lastTap.y) < 40) {
+    lastTap = { id: null, t: 0, x: 0, y: 0 };
+    if (!UI.locked && !UI.stack.length && !$('#sheetRoot').firstChild) logUse(d.id);
+  } else lastTap = { id: d.id, t: now, x: e.clientX, y: e.clientY };
+}, { passive: true });
+document.addEventListener('contextmenu', e => { if (e.target.closest('.bcard')) e.preventDefault(); });
+/* =====================================================================
+   EXPORT / IMPORT / SAMPLE DATA / STORAGE / INIT
+   ===================================================================== */
+function exportJson() {
+  try {
+    const used = {}; Object.keys(IMG).forEach(id => { used[id] = IMG[id]; });
+    const blob = new Blob([JSON.stringify({ app: APP_NAME, version: 1, exportedAt: new Date().toISOString(), state: S, images: used })], { type: 'application/json' });
+    downloadBlob(blob, `project-pan-backup-${today()}.json`); toast('Backup exported ✨');
+  } catch (e) { toast('Couldn’t export — your data may be too large for one file.'); }
+}
+const csvCell = v => { let s = v == null ? '' : String(v); if (/^[=+\-@\t\r]/.test(s)) s = "'" + s; return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+function exportCsv(kind) {
+  let rows;
+  if (kind === 'logs') { rows = [['product_id', 'product_name', 'date', 'timestamp']]; S.products.forEach(p => p.logs.forEach(l => rows.push([p.id, p.name, l.day, new Date(l.ts).toISOString()]))); }
+  else {
+    rows = [['id', 'name', 'brand', 'category', 'status', 'price_inr', 'shade', 'finish', 'expected_uses', 'estimated_past_uses', 'logged_uses', 'cost_per_use_inr', 'estimated_cost_per_use', 'percent_left', 'where_bought', 'date_bought', 'gift', 'date_opened', 'pao_months', 'expiry_date', 'start_date', 'finish_date', 'repurchase', 'note']];
+    S.products.forEach(p => { const e = expiryInfo(p), c = costPerUse(p); rows.push([p.id, p.name, p.brand, p.cat, p.status, p.price, p.shade, p.finish, p.expected, p.estPast, p.logs.length, c == null ? '' : c.toFixed(2), isEstimated(p) ? 'yes' : 'no', pctLeft(p), p.where, p.bought, p.gift ? 'yes' : 'no', p.opened, p.pao, e ? e.exp : '', p.startDate, p.finishDate, p.verdict, p.note]); });
+  }
+  downloadBlob(new Blob(['﻿' + rows.map(r => r.map(csvCell).join(',')).join('\r\n')], { type: 'text/csv;charset=utf-8' }), `project-pan-${kind}-${today()}.csv`); toast('CSV exported ✨');
+}
+async function importFile(file) {
+  try {
+    if (file.size > 250 * 1024 * 1024) throw new Error('too big');
+    const obj = JSON.parse(await file.text());
+    const raw = obj && obj.state ? obj.state : obj;
+    const n = normalize(raw); if (!n) throw new Error('not a backup');
+    const imgs = {}; const im = obj && obj.images && typeof obj.images === 'object' ? obj.images : {};
+    Object.keys(im).forEach(k => { if (typeof im[k] === 'string' && /^data:image\/(png|jpe?g|webp|gif);base64,/.test(im[k])) imgs[k] = im[k]; });
+    const photos = n.products.reduce((a, p) => a + p.photos.length, 0);
+    sheet(`<h2>Replace everything?</h2><p class="muted">This backup has <b>${plural(n.products.length, 'product')}</b>, ${plural(n.products.reduce((a, p) => a + p.logs.length, 0), 'logged use')}, ${plural(photos, 'progress photo')} and ${plural(Object.keys(imgs).length, 'image')}.<br><br>Your current data (${plural(S.products.length, 'product')}) will be <b>replaced</b>. Export a backup first if you’re unsure.</p><div class="row mt16"><button class="btn ghost grow" data-act="closeSheet">Cancel</button><button class="btn danger grow" data-act="importGo">Replace</button></div>`);
+    ACT.importGo = async () => {
+      const oldS = S, oldI = IMG; closeSheet();
+      try {
+        S = n; IMG = imgs; S.badgesSeen = [...new Set([...S.badgesSeen, ...earnedBadges().map(b => b.id)])];
+        for (const id of Object.keys(oldI)) await Store.del('img', id);
+        for (const id of Object.keys(imgs)) { if (!(await Store.set('img', id, imgs[id]))) throw new Error('write'); }
+        if (!(await Store.set('kv', 'state', S))) throw new Error('write');
+        UI.stack = []; UI.form = null; UI.cat = 'All'; render(); toast('Backup imported 💖');
+      } catch (e) { S = oldS; IMG = oldI; await saveNow(); for (const id of Object.keys(oldI)) await Store.set('img', id, oldI[id]); render(); toast('Import failed — your original data is untouched.'); }
+    };
+  } catch (e) { toast('That file doesn’t look like a ' + APP_NAME + ' backup.'); }
+}
+
+/* ---------- demo data ---------- */
+function loadSample() {
+  if (S.products.some(p => p.sample)) { toast('Demo data is already loaded'); return; }
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const t = today(), mk = (o, uses, span, fin) => {
+    const p = Object.assign({ id: uid(), brand: '', shade: '', finish: '', price: null, where: '', bought: null, gift: false, opened: null, openedApprox: false, pao: null, startDate: null, startAuto: false, finishDate: null, status: 'active', inUse: false, partly: false, pctBase: 100, baseLogs: 0, estPast: 0, fav: false, added: Date.now() - (span + 5) * 864e5, logs: [], photos: [], verdict: null, note: '', sample: true, img: null, bgRemoved: false }, o);
+    const days = new Set(); let guard = 0; while (days.size < Math.min(uses, span) && guard++ < 999) days.add(addDays(t, -Math.floor(rnd() * span)));
+    if (o.today) days.add(t);
+    [...days].sort().forEach(d => { const k = 1 + (rnd() > .85 ? 1 : 0); for (let i = 0; i < k && p.logs.length < uses; i++) p.logs.push({ id: uid(), ts: Date.parse(d + 'T05:00:00Z') + (p.logs.length % 7) * 90000, day: d }); });
+    if (o.today && !p.logs.some(l => l.day === t)) { if (p.logs.length >= uses) p.logs.pop(); p.logs.push({ id: uid(), ts: Date.parse(t + 'T05:00:00Z'), day: t }); }
+    p.logs.sort((a, b) => a.ts - b.ts);
+    if (p.logs.length) { p.startDate = p.logs[0].day; p.startAuto = true; }
+    if (fin) { p.status = 'finished'; p.finishDate = addDays(t, -fin); p.pctBase = 0; p.baseLogs = p.logs.length; }
+    return p;
+  };
+  const list = [
+    mk({ name: 'Soft Pinch Liquid Blush', brand: 'Rare Beauty', cat: 'Cheeks', price: 2300, expected: 90, shade: 'Joy', finish: 'Dewy', fav: true, bought: addDays(t, -80), where: 'Nykaa', opened: addDays(t, -75), pao: 12, today: true }, 44, 60),
+    mk({ name: 'Lip Glow Oil', brand: 'Dior', cat: 'Lips', price: 3200, expected: 70, shade: '001 Pink', finish: 'Glossy', gift: true, opened: addDays(t, -50), pao: 12, today: true }, 30, 40),
+    mk({ name: 'Skin Tint SPF 40', brand: 'Kosas', cat: 'Face', price: 3400, expected: 110, shade: 'Light 2', finish: 'Natural', inUse: true, partly: true, pctBase: 55, estPast: 50, opened: addDays(t, -150), openedApprox: true, pao: 12, bought: addDays(t, -170), where: 'Sephora' }, 26, 30),
+    mk({ name: 'Brow Gel', brand: 'Benefit', cat: 'Eyes', price: 2100, expected: 100, shade: '3.5', finish: 'Natural', today: true, opened: addDays(t, -20), pao: 6 }, 16, 20),
+    mk({ name: 'Vitamin C Serum', brand: 'Minimalist', cat: 'Skincare', price: 699, expected: 60, opened: addDays(t, -160), pao: 6, today: true, bought: addDays(t, -170), where: 'Nykaa' }, 40, 55),
+    mk({ name: 'Fluffy Blending Brush', brand: 'Real Techniques', cat: 'Tools', price: 1200, expected: 300, fav: true }, 44, 50),
+    mk({ name: 'Eyeshadow Palette', brand: 'Huda Beauty', cat: 'Eyes', price: 4900, expected: 120, finish: 'Shimmer', fav: true }, 22, 45),
+    mk({ name: 'Tinted Moisturiser', brand: 'Bobbi Brown', cat: 'Face', price: 2800, expected: 90, opened: addDays(addMonths(t, -12), 10), pao: 12 }, 20, 25),
+    mk({ name: 'Hydrating Lip Balm', brand: 'Laneige', cat: 'Lips', price: 1500, expected: 55, finish: 'Dewy', opened: addDays(t, -200), pao: 12 }, 49, 80, 20),
+    mk({ name: 'Mini Mascara', brand: 'Maybelline', cat: 'Eyes', price: 599, expected: 70, bought: addDays(t, -120) }, 61, 90, 33),
+    mk({ name: 'Setting Powder', brand: 'Laura Mercier', cat: 'Face', price: 3900, expected: 150, finish: 'Matte' }, 120, 160, 40),
+    mk({ name: 'Cream Bronzer', brand: 'Fenty', cat: 'Cheeks', price: 2900, expected: 70, finish: 'Satin' }, 55, 100, 9),
+  ];
+  const v = ['yes', 'maybe', 'no', 'yes']; list.filter(p => p.status === 'finished').forEach((p, i) => { p.verdict = v[i % 4]; });
+  list[8].partly = false; list[0].photos = [];
+  S.products.push(...list); list.filter(p => p.status === 'active').slice(0, 5).forEach(p => S.basket.push(p.id));
+  S.projectIds.push(list[0].id, list[6].id);
+  S.challenges.push({ id: uid(), title: 'Use up 10 products in 3 months', target: 10, start: addDays(t, -60), end: addMonths(t, 1), sample: true });
+  S.wishlist.push({ id: uid(), name: 'Glossier Cloud Paint', price: 1800, link: '', img: null, added: Date.now() - 12 * 864e5, sample: true }, { id: uid(), name: 'Charlotte Tilbury Pillow Talk', price: 3600, link: '', img: null, added: Date.now() - 34 * 864e5, sample: true });
+  S.settings.onboarded = true; seedBadges(); save(); render(); toast('Demo data loaded ✨ — clear it any time in Profile');
+}
+function clearSample() {
+  const ids = new Set(S.products.filter(p => p.sample).map(p => p.id));
+  S.products = S.products.filter(p => !p.sample); S.basket = S.basket.filter(i => !ids.has(i)); S.projectIds = S.projectIds.filter(i => !ids.has(i));
+  S.wishlist = S.wishlist.filter(w => !w.sample); S.challenges = S.challenges.filter(c => !c.sample); lastLogs = []; gcImages(); save(); render(); toast('Demo data cleared');
+}
+
+/* ---------- storage warning ---------- */
+async function checkStorage() {
+  const u = await Store.usage(), box = $('#storeWarn'); if (!u || !box) return;
+  const pct = u.used / u.quota;
+  if (pct > .8) box.innerHTML = `<div class="warnbar mt12">Storage is ${Math.round(pct * 100)}% full. Export a backup and consider removing old progress photos.</div>`;
+}
+
+/* ---------- init ---------- */
+let lastDay = today();
+setInterval(() => { if (today() !== lastDay) { lastDay = today(); render(); } }, 30000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden && today() !== lastDay) { lastDay = today(); render(); } });
+const _render = render; render = function () { _render(); if (UI.tab === 'profile' && !UI.stack.length) checkStorage(); };
+
+(async function init() {
+  await Store.init();
+  const raw = await Store.get('kv', 'state'), n = normalize(raw);
+  if (n) S = n; else if (raw) { await Store.set('kv', 'state_backup', raw); toast('Your saved data looked damaged, so it was set aside safely.'); }
+  const imgs = await Store.all('img'); Object.keys(imgs).forEach(k => { if (typeof imgs[k] === 'string') IMG[k] = imgs[k]; });
+  if (!raw) { S.settings.started = today(); await Store.set('kv', 'state', S); }
+  if (!S.settings.started) S.settings.started = today();
+  render();
+  if (!S.settings.onboarded) { UI.celeb = { t: 'onb', step: 0 }; renderCeleb(); }
+  try { if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) navigator.serviceWorker.register('sw.js').catch(() => { /* optional */ }); } catch (e) { /* ignore */ }
+  try { history.replaceState({ d: 0 }, ''); } catch (e) { /* ignore */ }
+  checkStorage().then(async () => { const u = await Store.usage(); if (u && u.used / u.quota > .8) toast('Storage is nearly full — export a backup in Profile.'); });
+})();
+</script>
+</body>
+</html>
